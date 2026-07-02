@@ -1,0 +1,288 @@
+{
+  "projectName": "o2-mcp",
+  "request": [
+    {
+      "transactionName": "HealthCheck",
+      "description": "Health endpoint load test - lightweight baseline",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "Health Check",
+          "method": "GET",
+          "url": "${BASE_URL}/health",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "*/*"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "ServerInfo",
+      "description": "Server info endpoint load test",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "Get Server Info",
+          "method": "GET",
+          "url": "${BASE_URL}/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ListTools",
+      "description": "MCP Server - List available tools",
+      "rampUp": {
+        "totalVU": 5,
+        "rampupvu": 2,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "GET MCP Tools List",
+          "method": "GET",
+          "url": "${BASE_URL}/mcp/tools",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ListResources",
+      "description": "MCP Server - List available resources",
+      "rampUp": {
+        "totalVU": 5,
+        "rampupvu": 2,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "GET MCP Resources List",
+          "method": "GET",
+          "url": "${BASE_URL}/mcp/resources",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ListPrompts",
+      "description": "MCP Server - List available prompts",
+      "rampUp": {
+        "totalVU": 5,
+        "rampupvu": 2,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "GET MCP Prompts List",
+          "method": "GET",
+          "url": "${BASE_URL}/mcp/prompts",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ToolsList_JSONRPC",
+      "description": "MCP Server - tools/list via JSON-RPC",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP tools/list JSON-RPC",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/list",
+            "params": {},
+            "id": "perf-test-list-tools"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ResourcesList_JSONRPC",
+      "description": "MCP Server - resources/list via JSON-RPC",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP resources/list JSON-RPC",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "resources/list",
+            "params": {},
+            "id": "perf-test-list-resources"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_PromptsList_JSONRPC",
+      "description": "MCP Server - prompts/list via JSON-RPC",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP prompts/list JSON-RPC",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "prompts/list",
+            "params": {},
+            "id": "perf-test-list-prompts"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ExecuteQuery",
+      "description": "MCP Server - execute_query tool call",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP execute_query tool",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "execute_query",
+              "arguments": {
+                "org_id": "default",
+                "stream_name": "default",
+                "query": "SELECT * FROM default LIMIT 10"
+              }
+            },
+            "id": "perf-test-execute-query"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ValidateVRL",
+      "description": "MCP Server - validate_vrl tool call",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP validate_vrl tool",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "validate_vrl",
+              "arguments": {
+                "vrl_code": ".message = \"test\""
+              }
+            },
+            "id": "perf-test-validate-vrl"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    }
+  ],
+  "thresholds": {
+    "http_req_duration": ["p(95)<5000", "p(99)<10000"],
+    "http_req_failed": ["rate<0.10"],
+    "http_reqs": ["rate>5"]
+  },
+  "environment_urls": {
+    "dev": "https://o2-mcp.dev.walmart.com",
+    "stage": "https://o2-mcp.stage.walmart.com",
+    "prod": "https://o2-mcp.prod.walmart.com"
+  }
+}
+

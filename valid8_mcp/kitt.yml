@@ -1,0 +1,203 @@
+# Bring-up: Looper / Concord testing is disabled so pipelines focus on Docker build + deploy only.
+# Re-enable later: uncomment the profile line below; restore preDeploy + postDeploy blocks from git history.
+setup:
+  featureFlagMap:
+    useArtifactory: true
+    imageValidation: false
+  releaseRefs: ["main"]
+owner:
+  group: IntlSRE
+profiles:
+  - basic-docker-build
+  # - git://intl-ecomm-svcs:ADK_Valid8_MCP:test_cases:kitt-stageGates
+build:
+  skip: false
+  docker:
+    app:
+      dockerFile: Dockerfile
+      runtime: python
+      buildArgs:
+        pythonVersion: 3.11-slim
+        # Bring-up: skip pytest in Docker build (set true when re-enabling CI tests)
+        run_tests: false
+        sonarEnable: true
+        enableTestReporting: true
+        skipCodeCoverage: false
+        cpd: ${concordProcessId}
+        BUILDURL: ${BUILD_URL}
+        LOOPERID: ${LOOPER_RUN_ID}
+        job_name: $JOB_NAME
+        job_url: $JOB_URL
+        jenkins_url: $JENKINS_URL
+        looper_run_id: $LOOPER_RUN_ID
+        github_repo_git_url: $GITHUB_REPO_GIT_URL
+        github_branch_name: "{{ $.kitt.build.commitEvent.currentBranch }}"
+        looper_job_type: $LOOPER_JOB_TYPE
+        sonarProjKey: "{{ $.kitt.build.commitEvent.repo.org}}:{{ $.kitt.build.commitEvent.repo.name}}"
+        sonarOpts: "-Dproject.settings=sonar-project.properties
+                            -Dsonar.branch.name={{ $.kitt.build.commitEvent.currentBranch }}
+                            -Dsonar.projectVersion={{ $.kitt.build.version }}
+                            -Dsonar.scm.revision={{ $.kitt.build.commitEvent.commitId }}
+                            -Dsonar.analysis.buildVersion={{ $.kitt.build.version }}
+                            -Dsonar.analysis.buildNumber=${LOOPER_RUN_ID}
+                            -Dsonar.analysis.buildUrl=${BUILD_URL}"
+deploy:
+  namespace: sre-tools
+  releaseType:
+    rollbackOnError: true
+    waitForReady: true
+    deployTimeout: 500
+  helm:
+    values:
+      min:
+        cpu: 2000m
+        memory: 6G
+      max:
+        cpu: 2000m
+        memory: 6G
+      scaling:
+        enabled: "true"
+        cpuPercent: 80
+        min: 1
+        max: 4
+      startupProbe:
+        enabled: "true"
+        wait: 30
+        probeInterval: 10
+        failureThreshold: 18
+        timeout: 5
+        path: "/health"
+        headers: "*/*"
+        port: 8015
+      livenessProbe:
+        path: "/health/liveness"
+        wait: 120
+        port: 8015
+        timeout: 5
+        failureThreshold: 10
+      readinessProbe:
+        path: "/health/readiness"
+        wait: 120
+        port: 8015
+        timeout: 5
+        failureThreshold: 10
+      networking:
+        pathPrefix: /
+        externalPort: "8015"
+        internalPort: "8015"
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+  gslb:
+    enabled: true
+    lbRoutings:
+      dev:
+        cnames: [ valid8-mcp.dev.walmart.com ]
+        matchStages: [ dev ]
+      stage:
+        cnames: [ valid8-mcp.stage.walmart.com ]
+        matchStages: [ stage ]
+      prod:
+        cnames: [ valid8-mcp.prod.walmart.com ]
+        matchStages: [ prod ]
+
+  stages:
+    - name: dev
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-dev-az-003']
+      refs: ['main']
+      helm:
+        values:
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.valid8_mcp
+                content: adk-valid8-mcp-secrets
+              # Walmart corporate CA bundle, injected at /secrets/walmart-ca.pem.
+              # Referenced by VALID8_VERIFY_SSL in adk-valid8-mcp-secrets.
+              - destination: walmart-ca.pem
+                content: adk-valid8-mcp-ca-bundle
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE/valid8-mcp
+          metadata:
+            labels:
+              wm.app: Valid8-MCP
+              wm.env: Dev
+
+    - name: stage
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-stage-az-003', 'uscentral-stage-az-305']
+      refs: ['main']
+      helm:
+        values:
+          scaling:
+            enabled: "true"
+            cpuPercent: 50
+            min: 3
+            max: 20
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.valid8_mcp
+                content: adk-valid8-mcp-secrets
+              # Walmart corporate CA bundle, injected at /secrets/walmart-ca.pem.
+              # Referenced by VALID8_VERIFY_SSL in adk-valid8-mcp-secrets.
+              - destination: walmart-ca.pem
+                content: adk-valid8-mcp-ca-bundle
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE/valid8-mcp
+          metadata:
+            labels:
+              wm.app: Valid8-MCP
+              wm.env: Stage
+
+    # Prod disabled — uncomment when ready to deploy to production
+    - name: prod
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-prod-az-006', 'uswest-prod-az-334']
+      refs: ['main']
+      helm:
+        values:
+          scaling:
+            enabled: "true"
+            cpuPercent: 50
+            min: 2
+            max: 10
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.valid8_mcp
+                content: adk-valid8-mcp-secrets
+              # Walmart corporate CA bundle, injected at /secrets/walmart-ca.pem.
+              # Referenced by VALID8_VERIFY_SSL in adk-valid8-mcp-secrets.
+              - destination: walmart-ca.pem
+                content: adk-valid8-mcp-ca-bundle
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE/valid8-mcp
+          metadata:
+            labels:
+              wm.app: Valid8-MCP
+              wm.env: Prod
+
+notify:
+  msTeams:
+    channelId: 19%3af2b1e51c12cb486a97d2b5d555a9519a%40thread.tacv2
+  slack:
+    channelName: gen-ai-ci-cd-alerts
+
+    

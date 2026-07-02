@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.env
+.venv/
+venv/
+
+# Cert bundles delivered via Akeyless at runtime (/secrets/walmart-ca.pem).
+# Kept locally only for dev; never committed — Walmart Secret Scanner blocks
+# any PEM certificate blocks in source.
+certs/
+*.pem
+*.crt
+*.cer
+*.key
+*.so
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+pytest-report.xml
+.DS_Store

@@ -1,0 +1,84 @@
+{
+  "projectName": "super-agent",
+  "request": [
+    {
+      "transactionName": "HealthCheck",
+      "description": "Health endpoint load test - lightweight baseline",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "Health Check",
+          "method": "GET",
+          "url": "${BASE_URL}/health",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "*/*"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "ReadyCheck",
+      "description": "Readiness probe - Kubernetes readiness baseline",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "Ready Check",
+          "method": "GET",
+          "url": "${BASE_URL}/ready",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "ListSessions",
+      "description": "GET /sessions - list conversation sessions for a user",
+      "rampUp": {
+        "totalVU": 5,
+        "rampupvu": 2,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "List Sessions",
+          "method": "GET",
+          "url": "${BASE_URL}/sessions?user_id=perf-test-user",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    }
+  ],
+  "thresholds": {
+    "http_req_duration": ["p(95)<5000", "p(99)<10000"],
+    "http_req_failed": ["rate<0.10"],
+    "http_reqs": ["rate>5"]
+  },
+  "environment_urls": {
+    "dev": "https://maof-super-agent.dev.walmart.com",
+    "stage": "https://maof-super-agent.stage.walmart.com",
+    "prod": "https://maof-super-agent.walmart.com"
+  }
+}

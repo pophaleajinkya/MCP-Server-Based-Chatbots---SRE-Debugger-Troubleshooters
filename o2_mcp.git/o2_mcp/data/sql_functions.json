@@ -1,0 +1,4096 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-02-12T15:42:40.536391+00:00",
+  "sources": {
+    "datafusion": {
+      "file": "datafusion_sql.md",
+      "url": "https://datafusion.apache.org/user-guide/sql/"
+    },
+    "openobserve": {
+      "file": "openobserve.md",
+      "url": "https://openobserve.ai/docs"
+    }
+  },
+  "functions": {
+    "approx_distinct": {
+      "name": "approx_distinct",
+      "description": "Returns the approximate number of distinct input values calculated using the HyperLogLog algorithm.",
+      "syntax": "approx_distinct(expression)",
+      "example": "SELECT approx_distinct(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "approximate",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "estimate",
+        "percentile",
+        "hyperloglog"
+      ]
+    },
+    "approx_median": {
+      "name": "approx_median",
+      "description": "Returns the approximate median (50th percentile) of input values. It is an alias of `approx_percentile_cont(0.5) WITHIN GROUP (ORDER BY x)`.",
+      "syntax": "approx_median(expression)",
+      "example": "SELECT approx_median(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "approximate",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "estimate",
+        "percentile",
+        "hyperloglog"
+      ]
+    },
+    "approx_percentile_cont": {
+      "name": "approx_percentile_cont",
+      "description": "Returns the approximate percentile of input values using the t-digest algorithm.",
+      "syntax": "approx_percentile_cont(percentile [, centroids]) WITHIN GROUP (ORDER BY expression)",
+      "example": "SELECT approx_percentile_cont(0.75) WITHIN GROUP (ORDER BY column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "approximate",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "estimate",
+        "percentile",
+        "hyperloglog"
+      ]
+    },
+    "approx_percentile_cont_with_weight": {
+      "name": "approx_percentile_cont_with_weight",
+      "description": "Returns the weighted approximate percentile of input values using the t-digest algorithm.",
+      "syntax": "approx_percentile_cont_with_weight(weight, percentile [, centroids]) WITHIN GROUP (ORDER BY expression)",
+      "example": "SELECT approx_percentile_cont_with_weight(weight_column, 0.90) WITHIN GROUP (ORDER BY column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "approximate",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "estimate",
+        "percentile",
+        "hyperloglog"
+      ]
+    },
+    "array_agg": {
+      "name": "array_agg",
+      "description": "Returns an array created from the expression elements. If ordering is required, elements are inserted in the specified order. This aggregation function can only mix DISTINCT and ORDER BY if the ordering expression is exactly the same as the argument expression.",
+      "syntax": "array_agg(expression [ORDER BY expression])",
+      "example": "SELECT array_agg(column_name ORDER BY other_column) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "avg": {
+      "name": "avg",
+      "description": "Returns the average of numeric values in the specified column.",
+      "syntax": "avg(expression)",
+      "example": "SELECT avg(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "mean",
+        "average"
+      ]
+    },
+    "bit_and": {
+      "name": "bit_and",
+      "description": "Computes the bitwise AND of all non-null input values.",
+      "syntax": "bit_and(expression)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "bit_or": {
+      "name": "bit_or",
+      "description": "Computes the bitwise OR of all non-null input values.",
+      "syntax": "bit_or(expression)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "bit_xor": {
+      "name": "bit_xor",
+      "description": "Computes the bitwise exclusive OR of all non-null input values.",
+      "syntax": "bit_xor(expression)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "bool_and": {
+      "name": "bool_and",
+      "description": "Returns true if all non-null input values are true, otherwise false.",
+      "syntax": "bool_and(expression)",
+      "example": "SELECT bool_and(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "bool_or": {
+      "name": "bool_or",
+      "description": "Returns true if all non-null input values are true, otherwise false.",
+      "syntax": "bool_and(expression)",
+      "example": "SELECT bool_and(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "count": {
+      "name": "count",
+      "description": "Returns the number of non-null values in the specified column. To include null values in the total count, use `count(",
+      "syntax": "count(expression)",
+      "example": "SELECT count(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "total count",
+        "number of",
+        "count rows"
+      ]
+    },
+    "first_value": {
+      "name": "first_value",
+      "description": "Returns value evaluated at the row that is the first row of the window frame.",
+      "syntax": "first_value(expression)",
+      "example": "SELECT department,\n employee_id,\n salary,\n first_value(salary) OVER (PARTITION BY department ORDER BY salary DESC) AS top_salary\nFROM employees;",
+      "category": "window",
+      "subcategory": "analytical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "grouping": {
+      "name": "grouping",
+      "description": "Returns 1 if the data is aggregated across the specified column, or 0 if it is not aggregated in the result set.",
+      "syntax": "grouping(expression)",
+      "example": "SELECT column_name, GROUPING(column_name) AS group_column\n FROM table_name\n GROUP BY GROUPING SETS ((column_name), ());",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "last_value": {
+      "name": "last_value",
+      "description": "Returns value evaluated at the row that is the last row of the window frame.",
+      "syntax": "last_value(expression)",
+      "example": "SELECT department,\n employee_id,\n salary,\n last_value(salary) OVER (PARTITION BY department ORDER BY salary) AS running_last_salary\nFROM employees;",
+      "category": "window",
+      "subcategory": "analytical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "max": {
+      "name": "max",
+      "description": "Returns the maximum value in the specified column.",
+      "syntax": "max(expression)",
+      "example": "SELECT max(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "median": {
+      "name": "median",
+      "description": "Returns the median value in the specified column.",
+      "syntax": "median(expression)",
+      "example": "SELECT median(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "min": {
+      "name": "min",
+      "description": "Returns the minimum value in the specified column.",
+      "syntax": "min(expression)",
+      "example": "SELECT min(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "percentile_cont": {
+      "name": "percentile_cont",
+      "description": "Returns the exact percentile of input values, interpolating between values if needed.",
+      "syntax": "percentile_cont(percentile) WITHIN GROUP (ORDER BY expression)",
+      "example": "SELECT percentile_cont(0.75) WITHIN GROUP (ORDER BY column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "string_agg": {
+      "name": "string_agg",
+      "description": "Concatenates the values of string expressions and places separator values between them. If ordering is required, strings are concatenated in the specified order. This aggregation function can only mix DISTINCT and ORDER BY if the ordering expression is exactly the same as the first argument expression.",
+      "syntax": "string_agg([DISTINCT] expression, delimiter [ORDER BY expression])",
+      "example": "SELECT string_agg(name, ', ') AS names_list\n FROM employee;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "sum": {
+      "name": "sum",
+      "description": "Returns the sum of all values in the specified column.",
+      "syntax": "sum(expression)",
+      "example": "SELECT sum(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "aggregate sum",
+        "total",
+        "add up"
+      ]
+    },
+    "var": {
+      "name": "var",
+      "description": "Returns the statistical sample variance of a set of numbers.",
+      "syntax": "var(expression)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "var_pop": {
+      "name": "var_pop",
+      "description": "Returns the statistical population variance of a set of numbers.",
+      "syntax": "var_pop(expression)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "general",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "corr": {
+      "name": "corr",
+      "description": "Returns the coefficient of correlation between two numeric values.",
+      "syntax": "corr(expression1, expression2)",
+      "example": "SELECT corr(column1, column2) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "covar_pop": {
+      "name": "covar_pop",
+      "description": "Returns the sample covariance of a set of number pairs.",
+      "syntax": "covar_samp(expression1, expression2)",
+      "example": "SELECT covar_samp(column1, column2) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "covar_samp": {
+      "name": "covar_samp",
+      "description": "Returns the sample covariance of a set of number pairs.",
+      "syntax": "covar_samp(expression1, expression2)",
+      "example": "SELECT covar_samp(column1, column2) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "nth_value": {
+      "name": "nth_value",
+      "description": "Returns the value evaluated at the nth row of the window frame (counting from 1). Returns NULL if no such row exists.",
+      "syntax": "nth_value(expression, n)",
+      "example": "SELECT nth_value(salary, 2) OVER (\n ORDER BY salary\n ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n) AS nth_value\nFROM employees;",
+      "category": "window",
+      "subcategory": "analytical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "regr_avgx": {
+      "name": "regr_avgx",
+      "description": "Computes the average of the independent variable (input) expression_x for the non-null paired data points.",
+      "syntax": "regr_avgx(expression_y, expression_x)",
+      "example": "select * from daily_sales;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "regr_avgy": {
+      "name": "regr_avgy",
+      "description": "Computes the average of the dependent variable (output) expression_y for the non-null paired data points.",
+      "syntax": "regr_avgy(expression_y, expression_x)",
+      "example": "select * from daily_temperature;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "regr_count": {
+      "name": "regr_count",
+      "description": "Counts the number of non-null paired data points.",
+      "syntax": "regr_count(expression_y, expression_x)",
+      "example": "select * from daily_metrics;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "regr_intercept": {
+      "name": "regr_intercept",
+      "description": "Computes the y-intercept of the linear regression line. For the equation (y = kx + b), this function returns b.",
+      "syntax": "regr_intercept(expression_y, expression_x)",
+      "example": "select * from weekly_performance;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "regr_r2": {
+      "name": "regr_r2",
+      "description": "Computes the square of the correlation coefficient between the independent and dependent variables.",
+      "syntax": "regr_r2(expression_y, expression_x)",
+      "example": "select * from weekly_performance;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "regr_slope": {
+      "name": "regr_slope",
+      "description": "Returns the slope of the linear regression line for non-null pairs in aggregate columns. Given input column Y and X: regr_slope(Y, X) returns the slope (k in Y = k\\",
+      "syntax": "regr_slope(expression_y, expression_x)",
+      "example": "select * from weekly_performance;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "regr_sxx": {
+      "name": "regr_sxx",
+      "description": "Computes the sum of squares of the independent variable.",
+      "syntax": "regr_sxx(expression_y, expression_x)",
+      "example": "select * from study_hours;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "regr_sxy": {
+      "name": "regr_sxy",
+      "description": "Computes the sum of products of paired data points.",
+      "syntax": "regr_sxy(expression_y, expression_x)",
+      "example": "select * from employee_productivity;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "regr_syy": {
+      "name": "regr_syy",
+      "description": "Computes the sum of squares of the dependent variable.",
+      "syntax": "regr_syy(expression_y, expression_x)",
+      "example": "select * from employee_productivity;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "stddev": {
+      "name": "stddev",
+      "description": "Returns the standard deviation of a set of numbers.",
+      "syntax": "stddev(expression)",
+      "example": "SELECT stddev(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "stddev_pop": {
+      "name": "stddev_pop",
+      "description": "Returns the population standard deviation of a set of numbers.",
+      "syntax": "stddev_pop(expression)",
+      "example": "SELECT stddev_pop(column_name) FROM table_name;",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "escaping": {
+      "name": "escaping",
+      "description": "Unlike many other languages, SQL literals do not by default support C-style escape sequences such as `\\n` for newline. Instead all characters in a `'` string are treated literally. To escape `'` in SQL literals, use `''`:",
+      "syntax": "> select 'it''s escaped';",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "and": {
+      "name": "and",
+      "description": "Logical And",
+      "syntax": "> SELECT true AND true;",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "or": {
+      "name": "or",
+      "description": "Logical Or",
+      "syntax": "> SELECT false OR true;",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "aggregate": {
+      "name": "aggregate",
+      "description": "```sql select",
+      "syntax": "select * from range(0,3)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "as": {
+      "name": "as",
+      "description": "```sql select",
+      "syntax": "select * from range(0,3)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "except": {
+      "name": "except",
+      "description": "```sql select",
+      "syntax": "select * from range(0,10)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "extend": {
+      "name": "extend",
+      "description": "```sql select",
+      "syntax": "select * from range(0,3)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "intersect": {
+      "name": "intersect",
+      "description": "```sql select",
+      "syntax": "select * from range(0,100)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "join": {
+      "name": "join",
+      "description": "```sql ( SELECT 'apples' AS item, 2 AS sales UNION ALL SELECT 'bananas' AS item, 5 AS sales ) |> AS produce_sales |> LEFT JOIN ( SELECT 'apples' AS item, 123 AS id ) AS produce_data ON produce_sales.item = produce_data.item |> SELECT produce_sales.item, sales, id; +--------+-------+------+ | item | sales | id | +--------+-------+------+ | apples | 2 | 123 | | bananas| 5 | NULL | +--------+-------+------+ ```",
+      "syntax": "(",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "limit": {
+      "name": "limit",
+      "description": "```sql select",
+      "syntax": "select * from range(0,3)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "select": {
+      "name": "select",
+      "description": "```sql select",
+      "syntax": "select * from range(0,3)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "union": {
+      "name": "union",
+      "description": "```sql select",
+      "syntax": "select * from range(0,3)",
+      "example": "",
+      "category": "aggregate",
+      "subcategory": "statistical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "variance",
+        "correlation",
+        "statistics",
+        "regression"
+      ]
+    },
+    "array_any_value": {
+      "name": "array_any_value",
+      "description": "Returns the first non-null element in the array.",
+      "syntax": "array_any_value(array)",
+      "example": "select array_any_value([NULL, 1, 2, 3]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_append": {
+      "name": "array_append",
+      "description": "Appends an element to the end of an array.",
+      "syntax": "array_append(array, element)",
+      "example": "select array_append([1, 2, 3], 4);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_concat": {
+      "name": "array_concat",
+      "description": "Concatenates arrays.",
+      "syntax": "array_concat(array[, ..., array_n])",
+      "example": "select array_concat([1, 2], [3, 4], [5, 6]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_dims": {
+      "name": "array_dims",
+      "description": "Returns an array of the array's dimensions.",
+      "syntax": "array_dims(array)",
+      "example": "select array_dims([[1, 2, 3], [4, 5, 6]]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_distance": {
+      "name": "array_distance",
+      "description": "Returns the Euclidean distance between two input arrays of equal length.",
+      "syntax": "array_distance(array1, array2)",
+      "example": "select array_distance([1, 2], [1, 4]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_distinct": {
+      "name": "array_distinct",
+      "description": "Returns distinct values from the array after removing duplicates.",
+      "syntax": "array_distinct(array)",
+      "example": "select array_distinct([1, 3, 2, 3, 1, 2, 4]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_element": {
+      "name": "array_element",
+      "description": "Extracts the element with the index n from the array.",
+      "syntax": "array_element(array, index)",
+      "example": "select array_element([1, 2, 3, 4], 3);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_except": {
+      "name": "array_except",
+      "description": "Returns an array of the elements that appear in the first array but not in the second.",
+      "syntax": "array_except(array1, array2)",
+      "example": "select array_except([1, 2, 3, 4], [5, 6, 3, 4]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_has": {
+      "name": "array_has",
+      "description": "Returns true if the array contains the element.",
+      "syntax": "array_has(array, element)",
+      "example": "select array_has([1, 2, 3], 2);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_has_all": {
+      "name": "array_has_all",
+      "description": "Returns true if all elements of sub-array exist in array.",
+      "syntax": "array_has_all(array, sub-array)",
+      "example": "select array_has_all([1, 2, 3, 4], [2, 3]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_has_any": {
+      "name": "array_has_any",
+      "description": "Returns true if any elements exist in both arrays.",
+      "syntax": "array_has_any(array, sub-array)",
+      "example": "select array_has_any([1, 2, 3], [3, 4]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_intersect": {
+      "name": "array_intersect",
+      "description": "Returns an array of elements in the intersection of array1 and array2.",
+      "syntax": "array_intersect(array1, array2)",
+      "example": "select array_intersect([1, 2, 3, 4], [5, 6, 3, 4]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_length": {
+      "name": "array_length",
+      "description": "Returns the length of the array dimension.",
+      "syntax": "array_length(array, dimension)",
+      "example": "select array_length([1, 2, 3, 4, 5], 1);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_max": {
+      "name": "array_max",
+      "description": "Returns the maximum value in the array.",
+      "syntax": "array_max(array)",
+      "example": "select array_max([3,1,4,2]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_min": {
+      "name": "array_min",
+      "description": "Returns the minimum value in the array.",
+      "syntax": "array_min(array)",
+      "example": "select array_min([3,1,4,2]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_ndims": {
+      "name": "array_ndims",
+      "description": "Returns the number of dimensions of the array.",
+      "syntax": "array_ndims(array, element)",
+      "example": "select array_ndims([[1, 2, 3], [4, 5, 6]]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_pop_back": {
+      "name": "array_pop_back",
+      "description": "Returns the array without the last element.",
+      "syntax": "array_pop_back(array)",
+      "example": "select array_pop_back([1, 2, 3]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_pop_front": {
+      "name": "array_pop_front",
+      "description": "Returns the array without the first element.",
+      "syntax": "array_pop_front(array)",
+      "example": "select array_pop_front([1, 2, 3]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_position": {
+      "name": "array_position",
+      "description": "Returns the position of the first occurrence of the specified element in the array, or NULL if not found.",
+      "syntax": "array_position(array, element)",
+      "example": "select array_position([1, 2, 2, 3, 1, 4], 2);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_positions": {
+      "name": "array_positions",
+      "description": "Searches for an element in the array, returns all occurrences.",
+      "syntax": "array_positions(array, element)",
+      "example": "select array_positions([1, 2, 2, 3, 1, 4], 2);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_prepend": {
+      "name": "array_prepend",
+      "description": "Prepends an element to the beginning of an array.",
+      "syntax": "array_prepend(element, array)",
+      "example": "select array_prepend(1, [2, 3, 4]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_remove": {
+      "name": "array_remove",
+      "description": "Removes the first element from the array equal to the given value.",
+      "syntax": "array_remove(array, element)",
+      "example": "select array_remove([1, 2, 2, 3, 2, 1, 4], 2);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_remove_all": {
+      "name": "array_remove_all",
+      "description": "Removes all elements from the array equal to the given value.",
+      "syntax": "array_remove_all(array, element)",
+      "example": "select array_remove_all([1, 2, 2, 3, 2, 1, 4], 2);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_remove_n": {
+      "name": "array_remove_n",
+      "description": "Removes the first `max` elements from the array equal to the given value.",
+      "syntax": "array_remove_n(array, element, max))",
+      "example": "select array_remove_n([1, 2, 2, 3, 2, 1, 4], 2, 2);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_repeat": {
+      "name": "array_repeat",
+      "description": "Returns an array containing element `count` times.",
+      "syntax": "array_repeat(element, count)",
+      "example": "select array_repeat(1, 3);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_replace": {
+      "name": "array_replace",
+      "description": "Replaces the first occurrence of the specified element with another specified element.",
+      "syntax": "array_replace(array, from, to)",
+      "example": "select array_replace([1, 2, 2, 3, 2, 1, 4], 2, 5);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_replace_all": {
+      "name": "array_replace_all",
+      "description": "Replaces all occurrences of the specified element with another specified element.",
+      "syntax": "array_replace_all(array, from, to)",
+      "example": "select array_replace_all([1, 2, 2, 3, 2, 1, 4], 2, 5);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_replace_n": {
+      "name": "array_replace_n",
+      "description": "Replaces the first `max` occurrences of the specified element with another specified element.",
+      "syntax": "array_replace_n(array, from, to, max)",
+      "example": "select array_replace_n([1, 2, 2, 3, 2, 1, 4], 2, 5, 2);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_resize": {
+      "name": "array_resize",
+      "description": "Resizes the list to contain size elements. Initializes new elements with value or empty if value is not set.",
+      "syntax": "array_resize(array, size, value)",
+      "example": "select array_resize([1, 2, 3], 5, 0);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_reverse": {
+      "name": "array_reverse",
+      "description": "Returns the array with the order of the elements reversed.",
+      "syntax": "array_reverse(array)",
+      "example": "select array_reverse([1, 2, 3, 4]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_slice": {
+      "name": "array_slice",
+      "description": "Returns a slice of the array based on 1-indexed start and end positions.",
+      "syntax": "array_slice(array, begin, end)",
+      "example": "select array_slice([1, 2, 3, 4, 5, 6, 7, 8], 3, 6);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_sort": {
+      "name": "array_sort",
+      "description": "Sort array.",
+      "syntax": "array_sort(array, desc, nulls_first)",
+      "example": "select array_sort([3, 1, 2]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_to_string": {
+      "name": "array_to_string",
+      "description": "Converts each element to its text representation.",
+      "syntax": "array_to_string(array, delimiter[, null_string])",
+      "example": "select array_to_string([[1, 2, 3, 4], [5, 6, 7, 8]], ',');",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "array_union": {
+      "name": "array_union",
+      "description": "Returns an array of elements that are present in both arrays (all elements from both arrays) without duplicates.",
+      "syntax": "array_union(array1, array2)",
+      "example": "select array_union([1, 2, 3, 4], [5, 6, 3, 4]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "cardinality": {
+      "name": "cardinality",
+      "description": "Returns the total number of elements in the array.",
+      "syntax": "cardinality(array)",
+      "example": "select cardinality([[1, 2, 3, 4], [5, 6, 7, 8]]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "empty": {
+      "name": "empty",
+      "description": "Returns 1 for an empty array or 0 for a non-empty array.",
+      "syntax": "empty(array)",
+      "example": "select empty([1]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "flatten": {
+      "name": "flatten",
+      "description": "Converts an array of arrays to a flat array. - Applies to any depth of nested arrays - Does not change arrays that are already flat The flattened array contains all the elements from all source arrays.",
+      "syntax": "flatten(array)",
+      "example": "select flatten([[1, 2], [3, 4]]);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "generate_series": {
+      "name": "generate_series",
+      "description": "Similar to the range function, but it includes the upper bound.",
+      "syntax": "generate_series(stop)",
+      "example": "select generate_series(1,3);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "make_array": {
+      "name": "make_array",
+      "description": "Returns an array using the specified input expressions.",
+      "syntax": "make_array(expression1[, ..., expression_n])",
+      "example": "select make_array(1, 2, 3, 4, 5);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "range": {
+      "name": "range",
+      "description": "Returns an Arrow array between start and stop with step. The range start..end contains all values with start <= x < end. It is empty if start >= end. Step cannot be 0.",
+      "syntax": "range(stop)",
+      "example": "select range(2, 10, 3);",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "string_to_array": {
+      "name": "string_to_array",
+      "description": "Splits a string into an array of substrings based on a delimiter. Any substrings matching the optional `null_str` argument are replaced with NULL.",
+      "syntax": "string_to_array(str, delimiter[, null_str])",
+      "example": "select string_to_array('abc##def', '##');",
+      "category": "scalar",
+      "subcategory": "array",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "collection",
+        "elements",
+        "list"
+      ]
+    },
+    "decode": {
+      "name": "decode",
+      "description": "Decode binary data from textual representation in string.",
+      "syntax": "decode(expression, format)",
+      "example": "",
+      "category": "scalar",
+      "subcategory": "binary",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "encode": {
+      "name": "encode",
+      "description": "Encode binary data into a textual representation.",
+      "syntax": "encode(expression, format)",
+      "example": "",
+      "category": "scalar",
+      "subcategory": "binary",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "coalesce": {
+      "name": "coalesce",
+      "description": "Returns the first of its arguments that is not _null_. Returns _null_ if all arguments are _null_. This function is often used to substitute a default value for _null_ values.",
+      "syntax": "coalesce(expression1[, ..., expression_n])",
+      "example": "select coalesce(null, null, 'datafusion');",
+      "category": "scalar",
+      "subcategory": "conditional",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "default value",
+        "null handling",
+        "switch",
+        "if",
+        "first non-null",
+        "when",
+        "case"
+      ]
+    },
+    "greatest": {
+      "name": "greatest",
+      "description": "Returns the greatest value in a list of expressions. Returns _null_ if all expressions are _null_.",
+      "syntax": "greatest(expression1[, ..., expression_n])",
+      "example": "select greatest(4, 7, 5);",
+      "category": "scalar",
+      "subcategory": "conditional",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "if",
+        "when",
+        "switch",
+        "case"
+      ]
+    },
+    "least": {
+      "name": "least",
+      "description": "Returns the smallest value in a list of expressions. Returns _null_ if all expressions are _null_.",
+      "syntax": "least(expression1[, ..., expression_n])",
+      "example": "select least(4, 7, 5);",
+      "category": "scalar",
+      "subcategory": "conditional",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "if",
+        "when",
+        "switch",
+        "case"
+      ]
+    },
+    "nvl": {
+      "name": "nvl",
+      "description": "Returns _expression2_ if _expression1_ is NULL otherwise it returns _expression1_ and _expression2_ is not evaluated. This function can be used to substitute a default value for NULL values.",
+      "syntax": "nvl(expression1, expression2)",
+      "example": "select nvl(null, 'a');",
+      "category": "scalar",
+      "subcategory": "conditional",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "if",
+        "when",
+        "switch",
+        "case"
+      ]
+    },
+    "nvl2": {
+      "name": "nvl2",
+      "description": "Returns _expression2_ if _expression1_ is not NULL; otherwise it returns _expression3_.",
+      "syntax": "nvl2(expression1, expression2, expression3)",
+      "example": "select nvl2(null, 'a', 'b');",
+      "category": "scalar",
+      "subcategory": "conditional",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "if",
+        "when",
+        "switch",
+        "case"
+      ]
+    },
+    "digest": {
+      "name": "digest",
+      "description": "Computes the binary hash of an expression using the specified algorithm.",
+      "syntax": "digest(expression, algorithm)",
+      "example": "select digest('foo', 'sha256');",
+      "category": "scalar",
+      "subcategory": "hashing",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "md5": {
+      "name": "md5",
+      "description": "Computes an MD5 128-bit checksum for a string expression.",
+      "syntax": "md5(expression)",
+      "example": "select md5('foo');",
+      "category": "scalar",
+      "subcategory": "hashing",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "sha224": {
+      "name": "sha224",
+      "description": "Computes the SHA-224 hash of a binary string.",
+      "syntax": "sha224(expression)",
+      "example": "select sha224('foo');",
+      "category": "scalar",
+      "subcategory": "hashing",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "sha256": {
+      "name": "sha256",
+      "description": "Computes the SHA-256 hash of a binary string.",
+      "syntax": "sha256(expression)",
+      "example": "select sha256('foo');",
+      "category": "scalar",
+      "subcategory": "hashing",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "sha384": {
+      "name": "sha384",
+      "description": "Computes the SHA-384 hash of a binary string.",
+      "syntax": "sha384(expression)",
+      "example": "select sha384('foo');",
+      "category": "scalar",
+      "subcategory": "hashing",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "sha512": {
+      "name": "sha512",
+      "description": "Computes the SHA-512 hash of a binary string.",
+      "syntax": "sha512(expression)",
+      "example": "select sha512('foo');",
+      "category": "scalar",
+      "subcategory": "hashing",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "map": {
+      "name": "map",
+      "description": "Returns an Arrow map with the specified key-value pairs. The `make_map` function creates a map from two lists: one for keys and one for values. Each key must be unique and non-null.",
+      "syntax": "map(key, value)",
+      "example": "SELECT MAP('type', 'test');",
+      "category": "scalar",
+      "subcategory": "map",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "map_entries": {
+      "name": "map_entries",
+      "description": "Returns a list of all entries in the map.",
+      "syntax": "map_entries(map)",
+      "example": "SELECT map_entries(MAP {'a': 1, 'b': NULL, 'c': 3});",
+      "category": "scalar",
+      "subcategory": "map",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "map_extract": {
+      "name": "map_extract",
+      "description": "Returns a list containing the value for the given key or an empty list if the key is not present in the map.",
+      "syntax": "map_extract(map, key)",
+      "example": "SELECT map_extract(MAP {'a': 1, 'b': NULL, 'c': 3}, 'a');",
+      "category": "scalar",
+      "subcategory": "map",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "map_keys": {
+      "name": "map_keys",
+      "description": "Returns a list of all keys in the map.",
+      "syntax": "map_keys(map)",
+      "example": "SELECT map_keys(MAP {'a': 1, 'b': NULL, 'c': 3});",
+      "category": "scalar",
+      "subcategory": "map",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "map_values": {
+      "name": "map_values",
+      "description": "Returns a list of all values in the map.",
+      "syntax": "map_values(map)",
+      "example": "SELECT map_values(MAP {'a': 1, 'b': NULL, 'c': 3});",
+      "category": "scalar",
+      "subcategory": "map",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "abs": {
+      "name": "abs",
+      "description": "Returns the absolute value of a number.",
+      "syntax": "abs(numeric_expression)",
+      "example": "SELECT abs(-5);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "acos": {
+      "name": "acos",
+      "description": "Returns the arc cosine or inverse cosine of a number.",
+      "syntax": "acos(numeric_expression)",
+      "example": "SELECT acos(1);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "acosh": {
+      "name": "acosh",
+      "description": "Returns the area hyperbolic cosine or inverse hyperbolic cosine of a number.",
+      "syntax": "acosh(numeric_expression)",
+      "example": "SELECT acosh(2);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "asin": {
+      "name": "asin",
+      "description": "Returns the arc sine or inverse sine of a number.",
+      "syntax": "asin(numeric_expression)",
+      "example": "SELECT asin(0.5);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "asinh": {
+      "name": "asinh",
+      "description": "Returns the area hyperbolic sine or inverse hyperbolic sine of a number.",
+      "syntax": "asinh(numeric_expression)",
+      "example": "SELECT asinh(1);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "atan": {
+      "name": "atan",
+      "description": "Returns the arc tangent or inverse tangent of a number.",
+      "syntax": "atan(numeric_expression)",
+      "example": "SELECT atan(1);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "atan2": {
+      "name": "atan2",
+      "description": "Returns the arc tangent or inverse tangent of `expression_y / expression_x`.",
+      "syntax": "atan2(expression_y, expression_x)",
+      "example": "SELECT atan2(1, 1);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "atanh": {
+      "name": "atanh",
+      "description": "Returns the area hyperbolic tangent or inverse hyperbolic tangent of a number.",
+      "syntax": "atanh(numeric_expression)",
+      "example": "SELECT atanh(0.5);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "cbrt": {
+      "name": "cbrt",
+      "description": "Returns the cube root of a number.",
+      "syntax": "cbrt(numeric_expression)",
+      "example": "SELECT cbrt(27);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "ceil": {
+      "name": "ceil",
+      "description": "Returns the nearest integer greater than or equal to a number.",
+      "syntax": "ceil(numeric_expression)",
+      "example": "SELECT ceil(3.14);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "cos": {
+      "name": "cos",
+      "description": "Returns the cosine of a number.",
+      "syntax": "cos(numeric_expression)",
+      "example": "SELECT cos(0);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "cosh": {
+      "name": "cosh",
+      "description": "Returns the hyperbolic cosine of a number.",
+      "syntax": "cosh(numeric_expression)",
+      "example": "SELECT cosh(1);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "cot": {
+      "name": "cot",
+      "description": "Returns the cotangent of a number.",
+      "syntax": "cot(numeric_expression)",
+      "example": "SELECT cot(1);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "degrees": {
+      "name": "degrees",
+      "description": "Converts radians to degrees.",
+      "syntax": "degrees(numeric_expression)",
+      "example": "SELECT degrees(pi());",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "exp": {
+      "name": "exp",
+      "description": "Returns the base-e exponential of a number.",
+      "syntax": "exp(numeric_expression)",
+      "example": "SELECT exp(1);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "factorial": {
+      "name": "factorial",
+      "description": "Factorial. Returns 1 if value is less than 2.",
+      "syntax": "factorial(numeric_expression)",
+      "example": "SELECT factorial(5);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "floor": {
+      "name": "floor",
+      "description": "Returns the nearest integer less than or equal to a number.",
+      "syntax": "floor(numeric_expression)",
+      "example": "SELECT floor(3.14);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "gcd": {
+      "name": "gcd",
+      "description": "Returns the greatest common divisor of `expression_x` and `expression_y`. Returns 0 if both inputs are zero.",
+      "syntax": "gcd(expression_x, expression_y)",
+      "example": "SELECT gcd(48, 18);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "isnan": {
+      "name": "isnan",
+      "description": "Returns true if a given number is +NaN or -NaN otherwise returns false.",
+      "syntax": "isnan(numeric_expression)",
+      "example": "SELECT isnan(1);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "iszero": {
+      "name": "iszero",
+      "description": "Returns true if a given number is +0.0 or -0.0 otherwise returns false.",
+      "syntax": "iszero(numeric_expression)",
+      "example": "SELECT iszero(0);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "lcm": {
+      "name": "lcm",
+      "description": "Returns the least common multiple of `expression_x` and `expression_y`. Returns 0 if either input is zero.",
+      "syntax": "lcm(expression_x, expression_y)",
+      "example": "SELECT lcm(4, 5);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "ln": {
+      "name": "ln",
+      "description": "Returns the natural logarithm of a number.",
+      "syntax": "ln(numeric_expression)",
+      "example": "SELECT ln(2.71828);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "log": {
+      "name": "log",
+      "description": "Returns the base-x logarithm of a number. Can either provide a specified base, or if omitted then takes the base-10 of a number.",
+      "syntax": "log(base, numeric_expression)",
+      "example": "SELECT log(10);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "log10": {
+      "name": "log10",
+      "description": "Returns the base-10 logarithm of a number.",
+      "syntax": "log10(numeric_expression)",
+      "example": "SELECT log10(100);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "log2": {
+      "name": "log2",
+      "description": "Returns the base-2 logarithm of a number.",
+      "syntax": "log2(numeric_expression)",
+      "example": "SELECT log2(8);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "nanvl": {
+      "name": "nanvl",
+      "description": "Returns the first argument if it's not _NaN_. Returns the second argument otherwise.",
+      "syntax": "nanvl(expression_x, expression_y)",
+      "example": "SELECT nanvl(0, 5);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "pi": {
+      "name": "pi",
+      "description": "Returns an approximate value of π.",
+      "syntax": "pi()",
+      "example": "",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "power": {
+      "name": "power",
+      "description": "Returns a base expression raised to the power of an exponent.",
+      "syntax": "power(base, exponent)",
+      "example": "SELECT power(2, 3);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "radians": {
+      "name": "radians",
+      "description": "Converts degrees to radians.",
+      "syntax": "radians(numeric_expression)",
+      "example": "SELECT radians(180);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "random": {
+      "name": "random",
+      "description": "Returns a random float value in the range [0, 1). The random seed is unique to each row.",
+      "syntax": "random()",
+      "example": "SELECT random();",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "round": {
+      "name": "round",
+      "description": "Rounds a number to the nearest integer.",
+      "syntax": "round(numeric_expression[, decimal_places])",
+      "example": "SELECT round(3.14159);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "human-readable",
+        "number",
+        "calculate",
+        "decimal places",
+        "numeric",
+        "precision",
+        "arithmetic"
+      ]
+    },
+    "signum": {
+      "name": "signum",
+      "description": "Returns the sign of a number. Negative numbers return `-1`. Zero and positive numbers return `1`.",
+      "syntax": "signum(numeric_expression)",
+      "example": "SELECT signum(-42);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "sin": {
+      "name": "sin",
+      "description": "Returns the sine of a number.",
+      "syntax": "sin(numeric_expression)",
+      "example": "SELECT sin(0);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "sinh": {
+      "name": "sinh",
+      "description": "Returns the hyperbolic sine of a number.",
+      "syntax": "sinh(numeric_expression)",
+      "example": "SELECT sinh(1);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "sqrt": {
+      "name": "sqrt",
+      "description": "Returns the square root of a number.",
+      "syntax": "sqrt(numeric_expression)",
+      "example": "",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "tan": {
+      "name": "tan",
+      "description": "Returns the tangent of a number.",
+      "syntax": "tan(numeric_expression)",
+      "example": "SELECT tan(pi()/4);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "tanh": {
+      "name": "tanh",
+      "description": "Returns the hyperbolic tangent of a number.",
+      "syntax": "tanh(numeric_expression)",
+      "example": "SELECT tanh(20);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "format number",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "trunc": {
+      "name": "trunc",
+      "description": "Truncates a number to a whole number or truncated to the specified decimal places.",
+      "syntax": "trunc(numeric_expression[, decimal_places])",
+      "example": "SELECT trunc(42.738);",
+      "category": "scalar",
+      "subcategory": "math",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "truncate",
+        "integer part",
+        "format number",
+        "remove decimals",
+        "number",
+        "calculate",
+        "numeric",
+        "arithmetic"
+      ]
+    },
+    "arrow_cast": {
+      "name": "arrow_cast",
+      "description": "Casts a value to a specific Arrow data type.",
+      "syntax": "arrow_cast(expression, datatype)",
+      "example": "select\n arrow_cast(-5, 'Int8') as a,\n arrow_cast('foo', 'Dictionary(Int32, Utf8)') as b,\n arrow_cast('bar', 'LargeUtf8') as c;",
+      "category": "scalar",
+      "subcategory": "other",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "arrow_metadata": {
+      "name": "arrow_metadata",
+      "description": "Returns the metadata of the input expression. If a key is provided, returns the value for that key. If no key is provided, returns a Map of all metadata.",
+      "syntax": "arrow_metadata(expression[, key])",
+      "example": "select arrow_metadata(col) from table;",
+      "category": "scalar",
+      "subcategory": "other",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "arrow_typeof": {
+      "name": "arrow_typeof",
+      "description": "Returns the name of the underlying [Arrow data type](https://docs.rs/arrow/latest/arrow/datatypes/enum.DataType.html) of the expression.",
+      "syntax": "arrow_typeof(expression)",
+      "example": "select arrow_typeof('foo'), arrow_typeof(1);",
+      "category": "scalar",
+      "subcategory": "other",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "get_field": {
+      "name": "get_field",
+      "description": "Returns a field within a map or a struct with the given key. Supports nested field access by providing multiple field names. Note: most users invoke `get_field` indirectly via field access syntax such as `my_struct_col['field_name']` which results in a call to `get_field(my_struct_col, 'field_name')`. Nested access like `my_struct['a']['b']` is optimized to a single call: `get_field(my_struct, 'a', 'b')`.",
+      "syntax": "get_field(expression, field_name[, field_name2, ...])",
+      "example": "select struct_col from test;",
+      "category": "scalar",
+      "subcategory": "other",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "nested field",
+        "json extract",
+        "struct access"
+      ]
+    },
+    "version": {
+      "name": "version",
+      "description": "Returns the version of DataFusion.",
+      "syntax": "version()",
+      "example": "select version();",
+      "category": "scalar",
+      "subcategory": "other",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "regexp_instr": {
+      "name": "regexp_instr",
+      "description": "Returns the position in a string where the specified occurrence of a POSIX regular expression is located.",
+      "syntax": "regexp_instr(str, regexp[, start[, N[, flags[, subexpr]]]])",
+      "example": "SELECT regexp_instr('ABCDEF', 'C(.)(..)');",
+      "category": "scalar",
+      "subcategory": "regex",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "parse",
+        "extract",
+        "pattern",
+        "match"
+      ]
+    },
+    "ascii": {
+      "name": "ascii",
+      "description": "Returns the first Unicode scalar value of a string.",
+      "syntax": "ascii(str)",
+      "example": "select ascii('abc');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "bit_length": {
+      "name": "bit_length",
+      "description": "Returns the bit length of a string.",
+      "syntax": "bit_length(str)",
+      "example": "select bit_length('datafusion');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "btrim": {
+      "name": "btrim",
+      "description": "Trims the specified trim string from the start and end of a string. If no trim string is provided, all whitespace is removed from the start and end of the input string.",
+      "syntax": "btrim(str[, trim_str])",
+      "example": "select btrim('__datafusion____', '_');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "character_length": {
+      "name": "character_length",
+      "description": "Returns the number of characters in a string.",
+      "syntax": "character_length(str)",
+      "example": "select character_length('Ångström');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "chr": {
+      "name": "chr",
+      "description": "Returns a string containing the character with the specified Unicode scalar value.",
+      "syntax": "chr(expression)",
+      "example": "select chr(128640);",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "concat": {
+      "name": "concat",
+      "description": "Concatenates multiple strings together.",
+      "syntax": "concat(str[, ..., str_n])",
+      "example": "select concat('data', 'f', 'us', 'ion');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "join text",
+        "format",
+        "build string",
+        "combine strings",
+        "convert to string",
+        "text"
+      ]
+    },
+    "concat_ws": {
+      "name": "concat_ws",
+      "description": "Concatenates multiple strings together with a specified separator.",
+      "syntax": "concat_ws(separator, str[, ..., str_n])",
+      "example": "select concat_ws('_', 'data', 'fusion');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "format",
+        "join with separator",
+        "convert to string",
+        "combine with delimiter",
+        "text"
+      ]
+    },
+    "contains": {
+      "name": "contains",
+      "description": "Return true if search_str is found within string (case-sensitive).",
+      "syntax": "contains(str, search_str)",
+      "example": "select contains('the quick brown fox', 'row');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "ends_with": {
+      "name": "ends_with",
+      "description": "Tests if a string ends with a substring.",
+      "syntax": "ends_with(str, substr)",
+      "example": "select ends_with('datafusion', 'soin');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "find_in_set": {
+      "name": "find_in_set",
+      "description": "Returns a value in the range of 1 to N if the string str is in the string list strlist consisting of N substrings.",
+      "syntax": "find_in_set(str, strlist)",
+      "example": "select find_in_set('b', 'a,b,c,d');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "initcap": {
+      "name": "initcap",
+      "description": "Capitalizes the first character in each word in the input string. Words are delimited by non-alphanumeric characters.",
+      "syntax": "initcap(str)",
+      "example": "select initcap('apache datafusion');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "left": {
+      "name": "left",
+      "description": "Returns a specified number of characters from the left side of a string.",
+      "syntax": "left(str, n)",
+      "example": "select left('datafusion', 4);",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "levenshtein": {
+      "name": "levenshtein",
+      "description": "Returns the [`Levenshtein distance`](https://en.wikipedia.org/wiki/Levenshtein_distance) between the two given strings.",
+      "syntax": "levenshtein(str1, str2)",
+      "example": "select levenshtein('kitten', 'sitting');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "lower": {
+      "name": "lower",
+      "description": "Converts a string to lower-case.",
+      "syntax": "lower(str)",
+      "example": "select lower('Ångström');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "lpad": {
+      "name": "lpad",
+      "description": "Pads the left side of a string with another string to a specified string length.",
+      "syntax": "lpad(str, n[, padding_str])",
+      "example": "select lpad('Dolly', 10, 'hello');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "ltrim": {
+      "name": "ltrim",
+      "description": "Trims the specified trim string from the beginning of a string. If no trim string is provided, all whitespace is removed from the start of the input string.",
+      "syntax": "ltrim(str[, trim_str])",
+      "example": "select ltrim(' datafusion ');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "octet_length": {
+      "name": "octet_length",
+      "description": "Returns the length of a string in bytes.",
+      "syntax": "octet_length(str)",
+      "example": "select octet_length('Ångström');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "overlay": {
+      "name": "overlay",
+      "description": "Returns the string which is replaced by another string from the specified position and specified count length.",
+      "syntax": "overlay(str PLACING substr FROM pos [FOR count])",
+      "example": "select overlay('Txxxxas' placing 'hom' from 2 for 4);",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "repeat": {
+      "name": "repeat",
+      "description": "Returns a string with an input string repeated a specified number.",
+      "syntax": "repeat(str, n)",
+      "example": "select repeat('data', 3);",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "replace": {
+      "name": "replace",
+      "description": "Replaces all occurrences of a specified substring in a string with a new substring.",
+      "syntax": "replace(str, substr, replacement)",
+      "example": "select replace('ABabbaBA', 'ab', 'cd');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "reverse": {
+      "name": "reverse",
+      "description": "Reverses the character order of a string.",
+      "syntax": "reverse(str)",
+      "example": "select reverse('datafusion');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "right": {
+      "name": "right",
+      "description": "Returns a specified number of characters from the right side of a string.",
+      "syntax": "right(str, n)",
+      "example": "select right('datafusion', 6);",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "rpad": {
+      "name": "rpad",
+      "description": "Pads the right side of a string with another string to a specified string length.",
+      "syntax": "rpad(str, n[, padding_str])",
+      "example": "select rpad('datafusion', 20, '_-');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "rtrim": {
+      "name": "rtrim",
+      "description": "Trims the specified trim string from the end of a string. If no trim string is provided, all whitespace is removed from the end of the input string.",
+      "syntax": "rtrim(str[, trim_str])",
+      "example": "select rtrim(' datafusion ');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "split_part": {
+      "name": "split_part",
+      "description": "Splits a string based on a specified delimiter and returns the substring in the specified position.",
+      "syntax": "split_part(str, delimiter, pos)",
+      "example": "select split_part('1.2.3.4.5', '.', 3);",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "starts_with": {
+      "name": "starts_with",
+      "description": "Tests if a string starts with a substring.",
+      "syntax": "starts_with(str, substr)",
+      "example": "select starts_with('datafusion','data');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "strpos": {
+      "name": "strpos",
+      "description": "Returns the starting position of a specified substring in a string. Positions begin at 1. If the substring does not exist in the string, the function returns 0.",
+      "syntax": "strpos(str, substr)",
+      "example": "select strpos('datafusion', 'fus');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "substr": {
+      "name": "substr",
+      "description": "Extracts a substring of a specified number of characters from a specific starting position in a string.",
+      "syntax": "substr(str, start_pos[, length])",
+      "example": "select substr('datafusion', 5, 3);",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "substring",
+        "character",
+        "format",
+        "part of string",
+        "convert to string",
+        "text",
+        "extract text"
+      ]
+    },
+    "substr_index": {
+      "name": "substr_index",
+      "description": "Returns the substring from str before count occurrences of the delimiter delim. If count is positive, everything to the left of the final delimiter (counting from the left) is returned. If count is negative, everything to the right of the final delimiter (counting from the right) is returned.",
+      "syntax": "substr_index(str, delim, count)",
+      "example": "select substr_index('www.apache.org', '.', 1);",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "to_hex": {
+      "name": "to_hex",
+      "description": "Converts an integer to a hexadecimal string.",
+      "syntax": "to_hex(int)",
+      "example": "select to_hex(12345689);",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "convert number",
+        "format",
+        "convert to string",
+        "number to string",
+        "text",
+        "hexadecimal"
+      ]
+    },
+    "translate": {
+      "name": "translate",
+      "description": "Translates characters in a string to specified translation characters.",
+      "syntax": "translate(str, chars, translation)",
+      "example": "select translate('twice', 'wic', 'her');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "upper": {
+      "name": "upper",
+      "description": "Converts a string to upper-case.",
+      "syntax": "upper(str)",
+      "example": "select upper('dataFusion');",
+      "category": "scalar",
+      "subcategory": "string",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "character",
+        "text",
+        "convert to string",
+        "format"
+      ]
+    },
+    "named_struct": {
+      "name": "named_struct",
+      "description": "Returns an Arrow struct using the specified name and input expressions pairs.",
+      "syntax": "named_struct(expression1_name, expression1_input[, ..., expression_n_name, expression_n_input])",
+      "example": "select * from t;",
+      "category": "scalar",
+      "subcategory": "struct",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "struct": {
+      "name": "struct",
+      "description": "Returns an Arrow struct using the specified input expressions optionally named. Fields in the returned struct use the optional name or the `cN` naming convention. For example: `c0`, `c1`, `c2`, etc.",
+      "syntax": "struct(expression1[, ..., expression_n])",
+      "example": "select * from t;",
+      "category": "scalar",
+      "subcategory": "struct",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "current_date": {
+      "name": "current_date",
+      "description": "Returns the current date in the session time zone. The `current_date()` return value is determined at query time and will return the same date, no matter when in the query plan the function executes.",
+      "syntax": "current_date()",
+      "example": "",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "current_time": {
+      "name": "current_time",
+      "description": "Returns the current time in the session time zone. The `current_time()` return value is determined at query time and will return the same time, no matter when in the query plan the function executes. The session time zone can be set using the statement 'SET datafusion.execution.time_zone = desired time zone'. The time zone can be a value like +00:00, 'Europe/London' etc.",
+      "syntax": "current_time()",
+      "example": "",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "date_bin": {
+      "name": "date_bin",
+      "description": "Calculates time intervals and returns the start of the interval nearest to the specified timestamp. Use `date_bin` to downsample time series data by grouping rows into time-based \"bins\" or \"windows\" and applying an aggregate or selector function to each window. For example, if you \"bin\" or \"window\" data into 15 minute intervals, an input timestamp of `2023-01-01T18:18:18Z` will be updated to the start time of the 15 minute bin it is in: `2023-01-01T18:15:00Z`.",
+      "syntax": "date_bin(interval, expression, origin-timestamp)",
+      "example": "SELECT date_bin(interval '1 day', time) as bin\nFROM VALUES ('2023-01-01T18:18:18Z'), ('2023-01-03T19:00:03Z') t(time);",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "date_part": {
+      "name": "date_part",
+      "description": "Returns the specified part of the date as an integer.",
+      "syntax": "date_part(part, expression)",
+      "example": "",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "time",
+        "date",
+        "calendar",
+        "get day",
+        "temporal",
+        "extract date",
+        "get year",
+        "get month",
+        "timestamp"
+      ]
+    },
+    "date_trunc": {
+      "name": "date_trunc",
+      "description": "Truncates a timestamp or time value to a specified precision.",
+      "syntax": "date_trunc(precision, expression)",
+      "example": "",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "histogram",
+        "truncate date",
+        "calendar",
+        "time bucket",
+        "round date",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "from_unixtime": {
+      "name": "from_unixtime",
+      "description": "Converts an integer to RFC3339 timestamp format (`YYYY-MM-DDT00:00:00.000000000Z`). Integers and unsigned integers are interpreted as seconds since the unix epoch (`1970-01-01T00:00:00Z`) return the corresponding timestamp.",
+      "syntax": "from_unixtime(expression[, timezone])",
+      "example": "select from_unixtime(1599572549, 'America/New_York');",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "epoch",
+        "calendar",
+        "convert timestamp",
+        "time",
+        "temporal",
+        "unix timestamp",
+        "timestamp"
+      ]
+    },
+    "make_date": {
+      "name": "make_date",
+      "description": "Make a date from year/month/day component parts.",
+      "syntax": "make_date(year, month, day)",
+      "example": "select make_date(2023, 1, 31);",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "make_time": {
+      "name": "make_time",
+      "description": "Make a time from hour/minute/second component parts.",
+      "syntax": "make_time(hour, minute, second)",
+      "example": "select make_time(13, 23, 1);",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "now": {
+      "name": "now",
+      "description": "Returns the current timestamp in the system configured timezone (None by default). The `now()` return value is determined at query time and will return the same timestamp, no matter when in the query plan the function executes.",
+      "syntax": "now()",
+      "example": "",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "to_char": {
+      "name": "to_char",
+      "description": "Returns a string representation of a date, time, timestamp or duration based on a [Chrono format](https://docs.rs/chrono/latest/chrono/format/strftime/index.html). Unlike the PostgreSQL equivalent of this function numerical formatting is not supported.",
+      "syntax": "to_char(expression, format)",
+      "example": "select to_char('2023-03-01'::date, '%d-%m-%Y');",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "format",
+        "display format",
+        "calendar",
+        "convert to string",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "to_date": {
+      "name": "to_date",
+      "description": "Converts a value to a date (`YYYY-MM-DD`). Supports strings, numeric and timestamp types as input. Strings are parsed as YYYY-MM-DD (e.g. '2023-07-20') if no [Chrono format](https://docs.rs/chrono/latest/chrono/format/strftime/index.html)s are provided. Integers and doubles are interpreted as days since the unix epoch (`1970-01-01T00:00:00Z`). Returns the corresponding date. Note: `to_date` returns Date32, which represents its values as the number of days since unix epoch(`1970-01-01`) stored as",
+      "syntax": "to_date('2017-05-31', '%Y-%m-%d')",
+      "example": "select to_date('2023-01-31');",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "to_local_time": {
+      "name": "to_local_time",
+      "description": "Converts a timestamp with a timezone to a timestamp without a timezone (with no offset or timezone information). This function handles daylight saving time changes.",
+      "syntax": "to_local_time(expression)",
+      "example": "SELECT to_local_time('2024-04-01T00:00:20Z'::timestamp);",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "to_time": {
+      "name": "to_time",
+      "description": "Converts a value to a time (`HH:MM:SS.nnnnnnnnn`). Supports strings and timestamps as input. Strings are parsed as `HH:MM:SS`, `HH:MM:SS.nnnnnnnnn`, or `HH:MM` if no [Chrono format](https://docs.rs/chrono/latest/chrono/format/strftime/index.html)s are provided. Timestamps will have the time portion extracted. Returns the corresponding time. Note: `to_time` returns Time64(Nanosecond), which represents the time of day in nanoseconds since midnight.",
+      "syntax": "to_time('12:30:45', '%H:%M:%S')",
+      "example": "select to_time('12:30:45');",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "to_timestamp": {
+      "name": "to_timestamp",
+      "description": "Converts a value to a timestamp (`YYYY-MM-DDT00:00:00.000000<TZ>`) in the session time zone. Supports strings, integer, unsigned integer, and double types as input. Strings are parsed as RFC3339 (e.g. '2023-07-20T05:44:00') if no [Chrono formats](https://docs.rs/chrono/latest/chrono/format/strftime/index.html) are provided. Strings that parse without a time zone are treated as if they are in the session time zone, or UTC if no session time zone is set. Integers, unsigned integers, and doubles ar",
+      "syntax": "to_timestamp(expression[, ..., format_n])",
+      "example": "select to_timestamp('2023-01-31T09:26:56.123456789-05:00');",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "convert to timestamp",
+        "date",
+        "calendar",
+        "parse date",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "to_timestamp_micros": {
+      "name": "to_timestamp_micros",
+      "description": "Converts a value to a timestamp (`YYYY-MM-DDT00:00:00.000000<TZ>`) in the session time zone. Supports strings, integer, unsigned integer, and double types as input. Strings are parsed as RFC3339 (e.g. '2023-07-20T05:44:00') if no [Chrono formats](https://docs.rs/chrono/latest/chrono/format/strftime/index.html) are provided. Strings that parse without a time zone are treated as if they are in the session time zone, or UTC if no session time zone is set. Integers, unsigned integers, and doubles ar",
+      "syntax": "to_timestamp_micros(expression[, ..., format_n])",
+      "example": "select to_timestamp_micros('2023-01-31T09:26:56.123456789-05:00');",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "to_timestamp_millis": {
+      "name": "to_timestamp_millis",
+      "description": "Converts a value to a timestamp (`YYYY-MM-DDT00:00:00.000<TZ>`) in the session time zone. Supports strings, integer, unsigned integer, and double types as input. Strings are parsed as RFC3339 (e.g. '2023-07-20T05:44:00') if no [Chrono formats](https://docs.rs/chrono/latest/chrono/format/strftime/index.html) are provided. Strings that parse without a time zone are treated as if they are in the session time zone, or UTC if no session time zone is set. Integers, unsigned integers, and doubles are i",
+      "syntax": "to_timestamp_millis(expression[, ..., format_n])",
+      "example": "select to_timestamp_millis('2023-01-31T09:26:56.123456789-05:00');",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "to_timestamp_nanos": {
+      "name": "to_timestamp_nanos",
+      "description": "Converts a value to a timestamp (`YYYY-MM-DDT00:00:00.000000000<TZ>`) in the session time zone. Supports strings, integer, unsigned integer, and double types as input. Strings are parsed as RFC3339 (e.g. '2023-07-20T05:44:00') if no [Chrono formats](https://docs.rs/chrono/latest/chrono/format/strftime/index.html) are provided. Strings that parse without a time zone are treated as if they are in the session time zone. Integers, unsigned integers, and doubles are interpreted as nanoseconds since t",
+      "syntax": "to_timestamp_nanos(expression[, ..., format_n])",
+      "example": "select to_timestamp_nanos('2023-01-31T09:26:56.123456789-05:00');",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "to_timestamp_seconds": {
+      "name": "to_timestamp_seconds",
+      "description": "Converts a value to a timestamp (`YYYY-MM-DDT00:00:00<TZ>`) in the session time zone. Supports strings, integer, unsigned integer, and double types as input. Strings are parsed as RFC3339 (e.g. '2023-07-20T05:44:00') if no [Chrono formats](https://docs.rs/chrono/latest/chrono/format/strftime/index.html) are provided. Strings that parse without a time zone are treated as if they are in the session time zone, or UTC if no session time zone is set. Integers, unsigned integers, and doubles are inter",
+      "syntax": "to_timestamp_seconds(expression[, ..., format_n])",
+      "example": "select to_timestamp_seconds('2023-01-31T09:26:56.123456789-05:00');",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "to_unixtime": {
+      "name": "to_unixtime",
+      "description": "Converts a value to seconds since the unix epoch (`1970-01-01T00:00:00`). Supports strings, dates, timestamps, integer, unsigned integer, and float types as input. Strings are parsed as RFC3339 (e.g. '2023-07-20T05:44:00') if no [Chrono formats](https://docs.rs/chrono/latest/chrono/format/strftime/index.html) are provided. Integers, unsigned integers, and floats are interpreted as seconds since the unix epoch (`1970-01-01T00:00:00`).",
+      "syntax": "to_unixtime(expression[, ..., format_n])",
+      "example": "select to_unixtime('2020-09-08T12:00:00+00:00');",
+      "category": "scalar",
+      "subcategory": "datetime",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "date",
+        "calendar",
+        "time",
+        "temporal",
+        "timestamp"
+      ]
+    },
+    "union_extract": {
+      "name": "union_extract",
+      "description": "Returns the value of the given field in the union when selected, or NULL otherwise.",
+      "syntax": "union_extract(union, field_name)",
+      "example": "select union_column, union_extract(union_column, 'a'), union_extract(union_column, 'b') from table_with_union;",
+      "category": "scalar",
+      "subcategory": "union",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "union_tag": {
+      "name": "union_tag",
+      "description": "Returns the name of the currently selected field in the union",
+      "syntax": "union_tag(union_expression)",
+      "example": "select union_column, union_tag(union_column) from table_with_union;",
+      "category": "scalar",
+      "subcategory": "union",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "unnest": {
+      "name": "unnest",
+      "description": "Expands an array or map into rows.",
+      "syntax": "> select unnest(make_array(1, 2, 3, 4, 5)) as unnested;",
+      "example": "select unnest(make_array(1, 2, 3, 4, 5)) as unnested;",
+      "category": "special",
+      "subcategory": "expansion",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "example": {
+      "name": "example",
+      "description": "```sql SELECT column_1, ( SELECT first_value(string) FROM y WHERE number = x.column_1 ) AS \"numeric string\" FROM x; +----------+----------------+ | column_1 | numeric string | +----------+----------------+ | 1 | one | | 2 | two | +----------+----------------+ ```",
+      "syntax": "SELECT",
+      "example": "",
+      "category": "special",
+      "subcategory": "expansion",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "examples": {
+      "name": "examples",
+      "description": "The following query calculates the averages of even and odd numbers in table `y` and returns the averages that are equal to the maximum value of `column_1` in table `x`.",
+      "syntax": "SELECT",
+      "example": "",
+      "category": "special",
+      "subcategory": "expansion",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "lag": {
+      "name": "lag",
+      "description": "Returns value evaluated at the row that is offset rows before the current row within the partition; if there is no such row, instead return default (which must be of the same type as value).",
+      "syntax": "lag(expression, offset, default)",
+      "example": "SELECT employee_id,\n salary,\n lag(salary, 1, 0) OVER (ORDER BY employee_id) AS prev_salary\nFROM employees;",
+      "category": "window",
+      "subcategory": "analytical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "lead": {
+      "name": "lead",
+      "description": "Returns value evaluated at the row that is offset rows after the current row within the partition; if there is no such row, instead return default (which must be of the same type as value).",
+      "syntax": "lead(expression, offset, default)",
+      "example": "SELECT\n employee_id,\n department,\n salary,\n lead(salary, 1, 0) OVER (PARTITION BY department ORDER BY salary) AS next_salary\nFROM employees;",
+      "category": "window",
+      "subcategory": "analytical",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "cume_dist": {
+      "name": "cume_dist",
+      "description": "Relative rank of the current row: (number of rows preceding or peer with the current row) / (total rows).",
+      "syntax": "cume_dist()",
+      "example": "SELECT salary,\n cume_dist() OVER (ORDER BY salary) AS cume_dist\nFROM employees;",
+      "category": "window",
+      "subcategory": "ranking",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "dense_rank": {
+      "name": "dense_rank",
+      "description": "Returns the rank of the current row without gaps. This function ranks rows in a dense manner, meaning consecutive ranks are assigned even for identical values.",
+      "syntax": "dense_rank()",
+      "example": "SELECT department,\n salary,\n dense_rank() OVER (PARTITION BY department ORDER BY salary DESC) AS dense_rank\nFROM employees;",
+      "category": "window",
+      "subcategory": "ranking",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "ntile": {
+      "name": "ntile",
+      "description": "Integer ranging from 1 to the argument value, dividing the partition as equally as possible",
+      "syntax": "ntile(expression)",
+      "example": "SELECT employee_id,\n salary,\n ntile(4) OVER (ORDER BY salary DESC) AS quartile\nFROM employees;",
+      "category": "window",
+      "subcategory": "ranking",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "percent_rank": {
+      "name": "percent_rank",
+      "description": "Returns the percentage rank of the current row within its partition. The value ranges from 0 to 1 and is computed as `(rank - 1) / (total_rows - 1)`.",
+      "syntax": "percent_rank()",
+      "example": "SELECT employee_id,\n salary,\n percent_rank() OVER (ORDER BY salary) AS percent_rank\nFROM employees;",
+      "category": "window",
+      "subcategory": "ranking",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "rank": {
+      "name": "rank",
+      "description": "Returns the rank of the current row within its partition, allowing gaps between ranks. This function provides a ranking similar to `row_number`, but skips ranks for identical values.",
+      "syntax": "rank()",
+      "example": "SELECT department,\n salary,\n rank() OVER (PARTITION BY department ORDER BY salary DESC) AS rank\nFROM employees;",
+      "category": "window",
+      "subcategory": "ranking",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "row_number": {
+      "name": "row_number",
+      "description": "Number of the current row within its partition, counting from 1.",
+      "syntax": "row_number()",
+      "example": "SELECT department,\n salary,\n row_number() OVER (PARTITION BY department ORDER BY salary DESC) AS row_num\nFROM employees;",
+      "category": "window",
+      "subcategory": "ranking",
+      "source": "datafusion",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "str_match": {
+      "name": "str_match",
+      "description": "filter the keyword in the field.",
+      "syntax": "str_match(field, 'search_term')",
+      "example": "",
+      "category": "fulltext",
+      "subcategory": "match",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "contains",
+        "string search",
+        "filter text"
+      ]
+    },
+    "str_match_ignore_case": {
+      "name": "str_match_ignore_case",
+      "description": "filter the keyword in the field with case_insensitive. it can match `KeyWord` or `keyWord`.",
+      "syntax": "str_match_ignore_case(field, 'search_term')",
+      "example": "",
+      "category": "fulltext",
+      "subcategory": "match",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "match_all": {
+      "name": "match_all",
+      "description": "filter the keyword in the fields, whose **Index Type** is set to `Full text search` in streams settings.",
+      "syntax": "match_all('search_term')",
+      "example": "",
+      "category": "fulltext",
+      "subcategory": "match",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "search",
+        "find text",
+        "full text search"
+      ]
+    },
+    "match_all_raw": {
+      "name": "match_all_raw",
+      "description": "filter the keyword in multiple fields. Unlike `match_all`, `match_all_raw` does not utilize `Inverted Index`, instead searches through entire original data. This function is case-sensitive.",
+      "syntax": "match_all_raw('search_term')",
+      "example": "",
+      "category": "fulltext",
+      "subcategory": "match",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "match_all_raw_ignore_case": {
+      "name": "match_all_raw_ignore_case",
+      "description": "same as `match_all_raw` but with case-insensitive.",
+      "syntax": "match_all_raw_ignore_case('search_term')",
+      "example": "",
+      "category": "fulltext",
+      "subcategory": "match",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "re_match": {
+      "name": "re_match",
+      "description": "use regexp to match the pattern in the field. Please refer to [Regex](https://docs.rs/regex/latest/regex/) for Regex Syntax.",
+      "syntax": "re_match(field, 'regex_pattern')",
+      "example": "SELECT * FROM {stream} WHERE re_match(log, '(err|panic)')",
+      "category": "fulltext",
+      "subcategory": "regex",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "pattern",
+        "match",
+        "regular expression",
+        "regex",
+        "pattern match",
+        "extract",
+        "parse"
+      ]
+    },
+    "re_not_match": {
+      "name": "re_not_match",
+      "description": "use regexp to not match the pattern in the field.",
+      "syntax": "re_not_match(field, 'regex_pattern')",
+      "example": "",
+      "category": "fulltext",
+      "subcategory": "regex",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "parse",
+        "extract",
+        "pattern",
+        "match"
+      ]
+    },
+    "arr_descending": {
+      "name": "arr_descending",
+      "description": "Sorts the given array field in descending order. E.g. `arr_descending(arrfield)`. Expects the array fields to be of same type.",
+      "syntax": "arr_descending(array_field)",
+      "example": "SELECT *, arr_descending(numbers) as descending_numbers FROM \"default\" ORDER BY _timestamp DESC",
+      "category": "array",
+      "subcategory": "openobserve",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "arrcount": {
+      "name": "arrcount",
+      "description": "Counts elements in an array. E.g. `arrcount(arrfield)` returns the number of elements in the array field.",
+      "syntax": "arrcount(array_field)",
+      "example": "SELECT *, arrcount(numbers) as number_count FROM \"default\" ORDER BY _timestamp DESC",
+      "category": "array",
+      "subcategory": "openobserve",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "arrindex": {
+      "name": "arrindex",
+      "description": "Selects a range of elements from an array. arrindex(field, start, end) where end is inclusive. E.g. `arrindex(arrfield, 0, 0)` returns `\"[\\\"element1\\\"]\"`.",
+      "syntax": "arrindex(array_field, start, end)",
+      "example": "SELECT *, arrindex(elements, 0, 2) as three_elements FROM \"default\" ORDER BY _timestamp DESC",
+      "category": "array",
+      "subcategory": "openobserve",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "arrjoin": {
+      "name": "arrjoin",
+      "description": "Concatenates arrays with a specified delimiter. E.g. arrjoin(field, ' | ') returns \"element1 | element2 | element3\".",
+      "syntax": "arrjoin(array_field, delimiter)",
+      "example": "SELECT *, arrjoin(numbers, ' | ') as joined_numbers FROM \"default\" ORDER BY _timestamp DESC",
+      "category": "array",
+      "subcategory": "openobserve",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "arrsort": {
+      "name": "arrsort",
+      "description": "Sorts the array field in increasing order. E.g. `arrsort(arrfield)`. Expects the array field elements to be of same type (e.g. array of numbers).",
+      "syntax": "arrsort(array_field)",
+      "example": "SELECT *, arrsort(numbers) as increasing_numbers FROM \"default\" ORDER BY _timestamp DESC",
+      "category": "array",
+      "subcategory": "openobserve",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "arrzip": {
+      "name": "arrzip",
+      "description": "Zips multiple array fields together with a delimiter. E.g. `arrzip(arrfield1, arrfield2, ',')` returns \"[\\\"element01,element11\\\", \\\"element02,element12\\\"]\".",
+      "syntax": "arrzip(array1, array2, delimiter)",
+      "example": "SELECT *, arrzip(numbers, strings, '|') as zipped_field FROM \"default\" ORDER BY _timestamp DESC",
+      "category": "array",
+      "subcategory": "openobserve",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "spath": {
+      "name": "spath",
+      "description": "Works on Json object by splitting paths and extracting values. E.g - Say we have a field `json_object_field` which contains value like - `\"{\\\"nested\\\": {\\\"value\\\": 23}}\"`. We can extract the value of `nested.value` with this - `spath(json_object_field, 'nested.value')`.",
+      "syntax": "spath(json_field, 'path.to.value')",
+      "example": "SELECT *, spath(json_object_field, 'nested.value') as nested_value FROM \"default\" ORDER BY _timestamp DESC",
+      "category": "scalar",
+      "subcategory": "json",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "cast_to_arr": {
+      "name": "cast_to_arr",
+      "description": "Casts an json array string to a native datafusion array that can be used with `unnest(cast_to_arr(field))`, and other datafusion array functions such as `array_pop_back(cast_to_arr(arrfield))` etc.",
+      "syntax": "cast_to_arr(json_array_string)",
+      "example": "SELECT _timestamp, bools, games, nums, floats, less, arrzip(bools, games, ' | ') as zipped_bools_games, arrindex(nums, 0, 0) as num_index, array_union(cast_to_arr(nums), cast_to_arr(less)) as union_nums_less, arrjoin(nums, ',') as joined_nums FROM \"arr_udf\" ORDER BY _timestamp DESC",
+      "category": "array",
+      "subcategory": "openobserve",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "to_array_string": {
+      "name": "to_array_string",
+      "description": "It is a reverse of `cast_to_arr(field)` to improve the interoperability between stringified json array fields in openobserve streams and native datafusion arrays.",
+      "syntax": "to_array_string(native_array)",
+      "example": "SELECT *, arrsort(to_array_string(array_concat(cast_to_arr(numbers), cast_to_arr(more_numbers)))) as increasing_numbers FROM \"default\" ORDER BY _timestamp DESC",
+      "category": "array",
+      "subcategory": "openobserve",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": []
+    },
+    "histogram": {
+      "name": "histogram",
+      "description": "Creates time-based histogram buckets for aggregation. Supports interval strings (e.g., '30 seconds', 'hour') or number of buckets.",
+      "syntax": "histogram(timestamp_field, 'interval') or histogram(timestamp_field, num_buckets)",
+      "example": "SELECT histogram(_timestamp, '30 seconds') AS key, COUNT(*) AS num FROM stream GROUP BY key ORDER BY key",
+      "category": "aggregate",
+      "subcategory": "time_series",
+      "source": "openobserve",
+      "aliases": [],
+      "parameters": [],
+      "return_type": "any",
+      "keywords": [
+        "time bucket",
+        "time series",
+        "histogram",
+        "binning",
+        "aggregation"
+      ]
+    }
+  },
+  "categories": {
+    "aggregate": {
+      "description": "Functions that operate on sets of values to compute a single result",
+      "subcategories": [
+        "approximate",
+        "general",
+        "statistical",
+        "time_series"
+      ]
+    },
+    "scalar": {
+      "description": "Functions that operate on single values and return a single value",
+      "subcategories": [
+        "array",
+        "binary",
+        "conditional",
+        "hashing",
+        "map",
+        "math",
+        "other",
+        "regex",
+        "string",
+        "struct",
+        "datetime",
+        "union",
+        "json"
+      ]
+    },
+    "window": {
+      "description": "Functions for window/analytic operations over partitions",
+      "subcategories": [
+        "analytical",
+        "ranking"
+      ]
+    },
+    "fulltext": {
+      "description": "Full-text search functions (OpenObserve specific)",
+      "subcategories": [
+        "match",
+        "regex"
+      ]
+    },
+    "array": {
+      "description": "Functions for array manipulation",
+      "subcategories": [
+        "datafusion",
+        "openobserve"
+      ]
+    },
+    "operator": {
+      "description": "SQL operators and literals",
+      "subcategories": [
+        "literals",
+        "logical"
+      ]
+    },
+    "select": {
+      "description": "SELECT statement related functions",
+      "subcategories": [
+        "pipe"
+      ]
+    },
+    "special": {
+      "description": "Special purpose functions",
+      "subcategories": [
+        "expansion"
+      ]
+    },
+    "subquery": {
+      "description": "Subquery related patterns",
+      "subcategories": [
+        "from",
+        "having",
+        "select"
+      ]
+    }
+  },
+  "statistics": {
+    "total_functions": 240,
+    "by_source": {
+      "datafusion": 223,
+      "openobserve": 17
+    },
+    "by_category": {
+      "aggregate": 51,
+      "scalar": 159,
+      "special": 4,
+      "window": 11,
+      "fulltext": 7,
+      "array": 8
+    }
+  }
+}

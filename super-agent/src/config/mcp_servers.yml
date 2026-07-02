@@ -1,0 +1,105 @@
+# MCP Server Configuration
+# Add or remove servers here — no code changes required.
+# The agent connects to all enabled servers and merges their tools.
+
+mcp_servers:
+  - name: health-mcp
+    description: "WCNP Health Agent MCP server — provides Kubernetes health diagnostics, Prometheus metrics, Istio service mesh checks, and deployment analysis tools for WCNP clusters."
+    url: http://localhost:8999/mcp/
+    transport: streamable_http
+    enabled: true
+    headers: {}
+    # headers:
+    #   Authorization: "Bearer <token>"
+
+  #── Add more MCP servers below ───────────────────────────────────────────────
+  - name: dependency-mcp
+    description: "Fetch application dependency graphs from SRE-OPS and DX Console. Supports WCNP (Kubernetes) upstream/downstream dependencies, OneOps app dependencies, and managed services (Cassandra, MeghaCache, Cosmos, SQL Server)."
+    url: http://localhost:8015/mcp/
+    transport: streamable_http
+    enabled: true
+    headers: {}
+
+  # - name: deployment-mcp
+  #   description: "Fetch application deployment information from SRE-OPS and DX Console. Supports WCNP (Kubernetes) deployments, OneOps app deployments, and managed services (Cassandra, MeghaCache, Cosmos, SQL Server)."
+  #   url: http://localhost:8016/mcp/
+  #   transport: streamable_http
+  #   enabled: true
+  #   headers: {}
+
+
+
+  - name: incidents-mcp
+    description: "Fetch all Walmart Incidents and their details."
+    url: http://localhost:8017/mcp/
+    transport: streamable_http
+    enabled: true
+    headers: {}
+
+
+
+  - name: deployment-mcp
+    description: "Fetch all Walmart Incidents and their details."
+    url: http://localhost:8019/mcp/
+    transport: streamable_http
+    enabled: true
+    headers: {}
+
+
+  - name: o2-mcp
+    description: "Fetch all Walmart Incidents and their details."
+    url: http://localhost:8020/mcp/
+    transport: streamable_http
+    enabled: true
+    headers: {}
+
+
+
+  - name: git-mcp
+    description: "GitHub Enterprise code intelligence for Root Cause Analysis — blame, commits, PRs, release tags, and deployment timestamps."
+    url: http://localhost:8202/mcp/
+    transport: streamable_http
+    enabled: true
+    headers: {}
+
+
+  - name: edge-network-mcp
+    description: "Edge network monitoring and analysis."
+    url: http://edge-network-agent.walmart.com/mcp/
+    transport: streamable_http
+    enabled: true
+    headers: {}
+
+  - name: conflect-mcp
+    description: "confluence knowledge base search and retrieval."
+    url: http://mcp-confluence.walmart.com/mcp
+    transport: streamable_http
+    enabled: true
+    required_token: true
+    headers: {
+        "WM_CONSUMER.ID": "690a60d0-0aec-58f6-c3b5-30ad71ae88c7",
+        "WM_SVC.ENV": "prod",
+        "WM_SVC.NAME": "APM0001365-MCP-CONFLUENCE"
+      }
+
+
+  - name: jira-mcp
+    description: "JIRA issue search and retrieval for incident correlation and RCA timelines."
+    url: http://mcp-jira.walmart.com/mcp
+    transport: streamable_http
+    enabled: true
+    required_token: true
+    headers: {
+       "WM_CONSUMER.ID": "690a60d0-0aec-58f6-c3b5-30ad71ae88c7",
+        "WM_SVC.ENV": "prod",
+        "WM_SVC.NAME": "APM0002050-MCP-JIRA"
+      }
+
+  - name: pipeline-mcp
+    description: "Pipeline Management provides a single interface for all of the information and actions related to pipeline runs within the GTP. It can fetch data from specific pipeline runs such as build information, test results, and deployment targets and status. Whether the pipeline is WCNP (or Kitt-native), an Infiniti (or 10x), or a normal Concord workflow, it can provide insight into all of the events across the delivery platform for your application."
+    url: http://pipeline-experience.prod.walmart.com/mcp
+    transport: streamable_http
+    enabled: true
+    required_token: true
+    headers: {
+      }

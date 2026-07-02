@@ -1,0 +1,28 @@
+# Sentinel secrets scanner suppression policy
+# All entries below are test fixtures containing dummy placeholder values only.
+# No real credentials exist in these files.
+# Reference: http://wmlink.wal-mart.com/sentinelpolicyexample
+
+safefile=__tests__/integration/auth-api.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/integration/chat-api.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/integration/health-api.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/lib/auth-server.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/lib/a2a-client.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/middleware.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=.env.test;CI-only test environment file containing dummy placeholder values for local and CI testing, not real credentials
+
+safefile=__tests__/instrumentation.test.ts;Test fixtures with dummy credentials for parseEnvContent unit tests, not real secrets
+safefile=__tests__/integration/auth-callback-api.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/integration/chat-stream-api.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/integration/session-messages-api.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/integration/copilotkit-api.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/integration/sessions-api.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/lib/auth-server-extra.test.ts;Test fixtures with dummy credentials, not real secrets
+safefile=__tests__/integration/auth-login-api.test.ts;Test fixtures with dummy credentials (clientId, PKCE values), not real secrets
+safefile=__tests__/features/auth-return-to.test.ts;Test fixtures with dummy credentials (access_token, PingFed config, PKCE values), not real secrets
+safefile=__tests__/contexts/AuthContext.test.tsx;Test fixtures with dummy PingFed logout URLs and token expiry assertions, not real secrets
+safefile=__tests__/contexts/AuthContext-extra.test.tsx;Test fixtures with token expiry test descriptions, not real secrets
+safefile=__tests__/pages/login-page.test.tsx;Test assertions referencing PingFederate SSO label and credentials error message, not real secrets
+
+suppressionkey=6b5d5d82c;Environment variable name reference only, not a secret value. PINGFED_CLIENT_SECRET is read from the environment at runtime via process.env.
+suppressionkey=d4cafb6d3;Dummy test value "secret123" in parseEnvContent unit test fixture, not a real API key

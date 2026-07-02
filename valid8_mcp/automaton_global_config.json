@@ -1,0 +1,42 @@
+{
+  "project_name": "valid8-mcp",
+  "slack": "gen-ai-ci-cd-alerts",
+  "email": [
+    "IntlSRE@walmart.com"
+  ],
+  "variables": {
+    "scmurl": "https://gecgithub01.walmart.com/intl-ecomm-svcs/ADK_Valid8_MCP.git",
+    "giturl": "https://gecgithub01.walmart.com/intl-ecomm-svcs/ADK_Valid8_MCP.git"
+  },
+  "flows": {
+    "perf-test": {
+      "appurl": "https://valid8-mcp.dev.walmart.com",
+      "duration": "5",
+      "vu": "10",
+      "dc_load_distribution": {
+        "eus2-dev-aperf1": 100
+      },
+      "config": "/perf/perf.json"
+    },
+    "perf-test-stage": {
+      "appurl": "https://valid8-mcp.stage.walmart.com",
+      "duration": "10",
+      "vu": "25",
+      "dc_load_distribution": {
+        "eus2-dev-aperf1": 50,
+        "scus-dev-aperf1": 50
+      },
+      "config": "/perf/perf.json"
+    },
+    "perf-test-prod": {
+      "appurl": "https://valid8-mcp.prod.walmart.com",
+      "duration": "15",
+      "vu": "50",
+      "dc_load_distribution": {
+        "eus2-perf-a1": 50,
+        "wus-perf-a1": 50
+      },
+      "config": "/perf/perf.json"
+    }
+  }
+}

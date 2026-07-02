@@ -1,0 +1,46 @@
+tools:
+  nodejs: 20.19.1
+
+parameters:
+  - releaseVersion: { type: string }
+  - artifactId: { type: string }
+  - testBurstRunId: { type: string }
+  - testrunid: { type: string }
+  - env: { type: string }
+  - concordId: { type: string }
+  - buildUrl: { type: string }
+  - looperRunId: { type: string }
+
+envs:
+  global:
+    variables:
+      ALLOW_ARTIFACTORY: "true"
+
+flows:
+  default:
+    - call: IntegrationTest
+    - call: EndToEndTest
+
+  EndToEndTest:
+    - shell: echo "EndToEndTest Started"
+    - if: $testrunid
+      then:
+        - shell: echo "Job Triggered Externally with RUN ID $testrunid"
+      else:
+        - var(testrunid): date '+%Y-%m-%d_%H-%M-%S-%3N'
+    - echo http://testburst.walmart.com/getData?testid1=$testrunid
+    - npm install --save --legacy-peer-deps --registry=https://npme.walmart.com/artifactory/api/npm/npme-npm/
+    - npm run test:coverage
+    - shell: echo "EndToEnd Test Run ${testrunid} completed"
+
+  IntegrationTest:
+    - shell: echo "IntegrationTest Started"
+    - if: $testrunid
+      then:
+        - shell: echo "Job Triggered Externally with RUN ID $testrunid"
+      else:
+        - var(testrunid): date '+%Y-%m-%d_%H-%M-%S-%3N'
+    - echo http://testburst.walmart.com/getData?testid1=$testrunid
+    - npm install --save --legacy-peer-deps --registry=https://npme.walmart.com/artifactory/api/npm/npme-npm/
+    - npm run test:coverage
+    - shell: echo "Integration Test Run ${testrunid} completed"

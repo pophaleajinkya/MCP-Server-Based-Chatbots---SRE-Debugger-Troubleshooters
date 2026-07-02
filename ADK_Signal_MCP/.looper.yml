@@ -1,0 +1,76 @@
+tools:
+  python: 3.11
+
+parameters:
+  - releaseVersion: { type: string }
+  - artifactId: { type: string }
+  - testBurstRunId: { type: string }
+  - testrunid: { type: string }
+  - env: { type: string }
+  - concordId: { type: string }
+  - buildUrl: { type: string }
+  - looperRunId: { type: string }
+
+envs:
+  global:
+    variables:
+      ALLOW_ARTIFACTORY: "true"
+
+docker:
+  - name: 'python-agent'
+    image: 'docker.ci.artifacts.walmart.com/devtools-docker/python-looper-agent:3.12-main'
+
+flows:
+  default:
+    - call: EndToEndTest
+    - call: IntegrationTest
+
+  EndToEndTest:
+    - if: $testrunid
+      then:
+        - shell: echo "Job Triggered Externally with RUN ID $testrunid"
+      else:
+        - var(testrunid): date '+%Y-%m-%d_%H-%M-%S-%3N'
+    - dockerAgent(python):
+        - shell: |
+            export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+            export UV_NATIVE_TLS=1
+            pip install uv --index-url https://pypi.ci.artifacts.walmart.com/artifactory/api/pypi/external-pypi/simple
+            uv sync
+            export TESTTYPE="e2e" \
+               ENV=${env} \
+               TESTRUNID=${testrunid} \
+               CONCORDID=${concordId} \
+               BUILDURL=${buildUrl} \
+               LOOPERID=${looperRunId} \
+               testLogs="true" \
+               testburstLogs="true" \
+               disableTestburst="false"
+            uv run pytest tests/ --maxfail=1 --disable-warnings \
+              --override-ini="addopts=" \
+              --junitxml=results.xml -v --tb=short
+
+  IntegrationTest:
+    - if: $testrunid
+      then:
+        - shell: echo "Job Triggered Externally with RUN ID $testrunid"
+      else:
+        - var(testrunid): date '+%Y-%m-%d_%H-%M-%S-%3N'
+    - dockerAgent(python):
+        - shell: |
+            export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+            export UV_NATIVE_TLS=1
+            pip install uv --index-url https://pypi.ci.artifacts.walmart.com/artifactory/api/pypi/external-pypi/simple
+            uv sync
+            export TESTTYPE="integration" \
+               ENV=${env} \
+               TESTRUNID=${testrunid} \
+               CONCORDID=${concordId} \
+               BUILDURL=${buildUrl} \
+               LOOPERID=${looperRunId} \
+               testLogs="true" \
+               testburstLogs="true" \
+               disableTestburst="false"
+            uv run pytest tests/ --maxfail=1 --disable-warnings \
+              --override-ini="addopts=" \
+              --junitxml=results.xml -v --tb=short

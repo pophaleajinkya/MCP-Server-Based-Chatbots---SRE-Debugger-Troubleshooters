@@ -1,0 +1,58 @@
+[project]
+name = "maof-dependency-agent"
+version = "0.1.0"
+description = ""
+authors = [{name = "Madhu Cheepati", email = "madhu.cheepati@walmart.com"}]
+requires-python = ">=3.11,<3.14"
+
+dependencies = [
+    "fastapi==0.115.0",
+    "uvicorn==0.31.0",
+    "openai==1.71.0",
+    "pymilvus==2.4.6",
+    "aiohttp==3.10.11",
+    "numpy==2.3.0",
+    "pydantic_settings==2.9.1",
+    "GitPython==3.1.44",
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-html>=4.0.0",
+    "requests>=2.0.0",
+    "redis>=5.0.0",
+    "coverage>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "marshmallow>=3.13.0,<4.0.0",
+    "httpx>=0.28.1,<0.29.0",
+    "walmart-intl-ecomm-svcs-maof-agent-kit",
+    "walmart-devtools-pytest-reporter-testburst~=0.0.10",
+    "langgraph>=0.1.0",
+    "langchain>=0.1.0",
+    "langchain-openai>=0.1.0",
+    "langchain-mcp-adapters>=0.1.0",
+    "mcp>=0.1.0",
+    "python-dotenv>=1.0.0",
+    "toons>=0.1.0",
+]
+
+[[tool.uv.index]]
+name = "walmart-pypi"
+url = "https://pypi.ci.artifacts.walmart.com/artifactory/api/pypi/pythonhosted-pypi-release-remote/simple/"
+default = true
+
+[[tool.uv.index]]
+name = "walmart-maof-agent-kit"
+url = "https://pypi.ci.artifacts.walmart.com/artifactory/api/pypi/intl-ecomm-svcs-pypi/simple"
+
+[[tool.uv.index]]
+name = "walmart-devtools-pypi"
+url = "https://pypi.ci.artifacts.walmart.com/artifactory/api/pypi/devtools-pypi/simple/"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

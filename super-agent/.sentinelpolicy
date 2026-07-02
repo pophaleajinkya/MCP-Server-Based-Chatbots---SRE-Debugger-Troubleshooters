@@ -1,0 +1,30 @@
+# ── test_mcp_client.py — fake Bearer tokens in unit tests ────────────────────
+safeline=test_mcp_client.py;125;Test data - fake Bearer token for header parsing validation
+safeline=test_mcp_client.py;132;Test data - fake Bearer token for header assertion
+safeline=test_mcp_client.py;224;Test data - fake Bearer token for YAML header parsing
+safeline=test_mcp_client.py;231;Test data - fake Bearer token for header assertion
+safeline=test_mcp_client.py;308;Test data - fake redis password in mock settings
+
+# ── test_mcp_validate.py — fake Bearer token in unit test ────────────────────
+safeline=test_mcp_validate.py;470;Test data - fake Bearer token for MCP validation
+
+# ── test_config.py — fake API keys in unit tests ────────────────────────────
+safeline=test_config.py;58;Test assertion - fake API key for element gateway
+safeline=test_config.py;61;Test assertion - fake API key for claude gateway
+safeline=test_config.py;175;Test assertion - fake API key in openai headers
+safeline=test_config.py;176;Test assertion - fake API key in openai headers
+safeline=test_config.py;180;Test data - fake API key override for element gateway
+safeline=test_config.py;183;Test assertion - fake API key in openai headers
+safeline=test_config.py;184;Test assertion - fake API key in openai headers
+safeline=test_config.py;190;Test assertion - fake API key in claude headers
+safeline=test_config.py;195;Test data - fake API key override for claude gateway
+safeline=test_config.py;198;Test assertion - fake API key in claude gateway
+
+# ── conftest.py — fake API keys in test fixtures ─────────────────────────────
+safeline=conftest.py;30;Test fixture - fake API key for element gateway
+safeline=conftest.py;34;Test fixture - fake API key for claude gateway
+
+# ── Source files — placeholder examples in docs/schema (not real tokens) ─────
+safeline=mcp_validate.py;10;Placeholder example in docstring - not a real token
+safeline=mcp_validate.py;47;Placeholder example in OpenAPI schema - not a real token
+safeline=mcp_servers.yml;13;Comment showing header format example - not a real token

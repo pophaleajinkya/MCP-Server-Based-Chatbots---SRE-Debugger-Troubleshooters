@@ -1,0 +1,23 @@
+profiles:
+  - stage-gates
+deploy:
+  stages:
+    - name: dev
+      preDeploy:
+        - concord:
+            name: End To End Test
+            enabled: true
+            arguments:
+              config:
+                git:
+                  orgName: '{{$.kitt.build.commitEvent.repo.org}}'
+                  repoName: '{{$.kitt.build.commitEvent.repo.name}}'
+                  branchName: '{{$.kitt.build.commitEvent.currentBranch}}'
+                  looperFile: .looper.yml
+                endToEndTesting:
+                  call: EndToEndTest
+                  mode: Active
+                  env: pqa
+                  threshHold: 80
+                  artifactId: '{{$.kitt.build.artifact}}'
+                  releaseVersion: '{{$.kitt.build.version}}'

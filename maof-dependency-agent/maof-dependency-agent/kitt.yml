@@ -1,0 +1,333 @@
+setup:
+  featureFlagMap:
+    useArtifactory: true
+    imageValidation: false
+  releaseRefs: ["main"]
+owner:
+  group: IntlSRE
+profiles:
+  - basic-docker-build
+  - git://intl-ecomm-svcs:maof-dependency-agent:feature/dependency_agent:kitt-stageGates
+
+build:
+  skip: false
+  artifact: "maof-dependency-agent"
+  docker:
+    app:
+      dockerFile: Dockerfile
+      buildArgs:
+        pythonVersion: 3.12-slim-bullseye
+        basePythonOSVersion: 3.11
+        sonarEnable: true
+        enableTestReporting: true
+        skipCodeCoverage: false
+        cpd: ${concordProcessId}
+        BUILDURL: ${BUILD_URL}
+        LOOPERID: ${LOOPER_RUN_ID}
+        job_name: $JOB_NAME
+        job_url: $JOB_URL
+        jenkins_url: $JENKINS_URL
+        looper_run_id: $LOOPER_RUN_ID
+        github_repo_git_url: $GITHUB_REPO_GIT_URL
+        github_branch_name: "{{ $.kitt.build.commitEvent.currentBranch }}"  #'{{ $.kitt.build.commitEvent.currentBranch }}' #$GITHUB_BRANCH_NAME
+        looper_job_type: $LOOPER_JOB_TYPE
+        sonarProjKey: "{{ $.kitt.build.commitEvent.repo.org}}:{{ $.kitt.build.commitEvent.repo.name}}"
+        sonarOpts: "-Dproject.settings=sonar-project.properties
+                            -Dsonar.branch.name={{ $.kitt.build.commitEvent.currentBranch }}
+                            -Dsonar.projectVersion={{ $.kitt.build.version }}
+                            -Dsonar.scm.revision={{ $.kitt.build.commitEvent.commitId }}
+                            -Dsonar.analysis.buildVersion={{ $.kitt.build.version }}
+                            -Dsonar.analysis.buildNumber=${LOOPER_RUN_ID}
+                            -Dsonar.analysis.buildUrl=${BUILD_URL}"
+deploy:
+  namespace: sre-tools
+  releaseType:
+    rollbackOnError: true
+    waitForReady: true
+    deployTimeout: 500
+  helm:
+    values:
+      min:
+        cpu: 2000m
+        memory: 6G
+      max:
+        cpu: 2000m
+        memory: 6G
+      scaling:
+        enabled: "true"
+        cpuPercent: 80
+        min: 1
+        max: 4
+      startupProbe:
+        enabled: "true"
+        wait: 30
+        probeInterval: 10
+        failureThreshold: 36
+        timeout: 5
+        path: "/health"
+        headers: "*/*"
+        port: 8010
+
+      livenessProbe:
+        path: "/health/liveness"
+        wait: 120
+        port: 8010
+        timeout: 5
+        failureThreshold: 10
+      readinessProbe:
+        path: "/health/readiness"
+        wait: 120
+        port: 8010
+        timeout: 5
+        failureThreshold: 10
+      networking:
+        pathPrefix: /
+        externalPort: "8010"
+        internalPort: "8010"
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+  gslb:
+    enabled: true
+    lbRoutings:
+      dev:
+        cnames: [ maof-dependency-agent.dev.walmart.com ]
+        matchStages: [ dev ]
+      stage:
+        cnames: [ maof-dependency-agent.stage.walmart.com ]
+        matchStages: [ stage ]
+      prod:
+        cnames: [ maof-dependency-agent.walmart.com ]
+        matchStages: [ prod ]
+
+  stages:
+    - name: dev
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-dev-az-003']
+      refs: ['main', 'fix/policy_violation']
+      helm:
+        values:
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.external-config
+                content: genAI/dev/external-config
+
+              - destination: .env.maof-dependency-agent
+                content: genAI/dev/maof-dependency-agent
+
+              - destination: .env.llm_gatway
+                content: genAI/dev/llm_gatway
+
+              - destination: .env.maof-common-config
+                content: genAI/dev/maof-common-config
+
+              - destination: .env.milvus-config
+                content: genAI/dev/milvus-config
+
+              - destination: .env.model-config
+                content: genAI/dev/model-config
+
+              - destination: .env.redis-config
+                content: genAI/dev/redis-config
+
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE
+          metadata:
+            labels:
+              wm.app: DEPENDENCY-AGENT
+              wm.env: Dev
+      preDeploy:
+        - concord:
+            name: Integration Test
+            enabled: true
+            arguments:
+              config:
+                git:
+                  orgName: '{{$.kitt.build.commitEvent.repo.org}}'
+                  repoName: '{{$.kitt.build.commitEvent.repo.name}}'
+                  branchName: '{{$.kitt.build.commitEvent.currentBranch}}'
+                  looperFile: .looper.yml
+                endToEndTesting:
+                  call: IntegrationTest
+                  mode: Passive
+                  env: pqa
+                  threshHold: 100
+                  artifactId: '{{$.kitt.build.artifact}}'
+                  releaseVersion: '{{$.kitt.build.version}}'
+      postDeploy:
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: 'api-spec.json'
+                contractTest:
+                  cname: "https://maof-dependency-agent.dev.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+
+    - name: stage
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-stage-az-003' , 'uscentral-stage-az-305']
+      refs: ['main']
+      helm:
+        values:
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.external-config
+                content: genAI/stage/external-config
+
+              - destination: .env.maof-dependency-agent
+                content: genAI/stage/maof-dependency-agent
+
+              - destination: .env.llm_gatway
+                content: genAI/stage/llm_gatway
+
+              - destination: .env.maof-common-config
+                content: genAI/stage/maof-common-config
+
+              - destination: .env.milvus-config
+                content: genAI/stage/milvus-config
+
+              - destination: .env.model-config
+                content: genAI/stage/model-config
+
+              - destination: .env.redis-config
+                content: genAI/stage/redis-config
+
+
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE
+          metadata:
+            labels:
+              wm.app: DEPENDENCY-AGENT
+              wm.env: Stage
+      postDeploy:
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test-stage
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: 'api-spec.json'
+                contractTest:
+                  cname: "https://maof-dependency-agent.stage.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+
+    - name: prod
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-prod-az-006','uswest-prod-az-334']
+      refs: ['main']
+      helm:
+        values:
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.external-config
+                content: genAI/prod/external-config
+
+              - destination: .env.maof-dependency-agent
+                content: genAI/prod/maof-dependency-agent
+
+              - destination: .env.llm_gatway
+                content: genAI/prod/llm_gatway
+
+              - destination: .env.maof-common-config
+                content: genAI/prod/maof-common-config
+
+              - destination: .env.milvus-config
+                content: genAI/prod/milvus-config
+
+              - destination: .env.model-config
+                content: genAI/prod/model-config
+
+              - destination: .env.redis-config
+                content: genAI/prod/redis-config
+
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE
+          metadata:
+            labels:
+              wm.app: DEPENDENCY-AGENT
+              wm.env: Prod
+      postDeploy:
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test-prod
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: 'api-spec.json'
+                contractTest:
+                  cname: "https://maof-dependency-agent.prod.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+notify:
+  msTeams:
+    channelId: 19%3af2b1e51c12cb486a97d2b5d555a9519a%40thread.tacv2
+  slack:
+    channelName: gen-ai-ci-cd-alerts

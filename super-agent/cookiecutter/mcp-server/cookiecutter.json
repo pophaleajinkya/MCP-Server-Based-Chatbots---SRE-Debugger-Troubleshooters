@@ -1,0 +1,10 @@
+{
+  "project_name": "My MCP Server",
+  "project_slug": "my-mcp-server",
+  "server_name": "my-mcp-server",
+  "server_description": "MCP server for <describe your domain here>",
+  "server_version": "1.0.0",
+  "server_port": "8999",
+  "author": "Your Team",
+  "python_version": "3.11"
+}

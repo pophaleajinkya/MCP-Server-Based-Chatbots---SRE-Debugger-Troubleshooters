@@ -1,0 +1,130 @@
+{
+  "projectName": "valid8-mcp",
+  "request": [
+    {
+      "transactionName": "HealthCheck",
+      "description": "Health endpoint load test",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "Health Check",
+          "method": "GET",
+          "url": "${BASE_URL}/health",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "*/*"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "ServerInfo",
+      "description": "Server info endpoint",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "Get Server Info",
+          "method": "GET",
+          "url": "${BASE_URL}/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ListTools",
+      "description": "List MCP tools",
+      "rampUp": {
+        "totalVU": 5,
+        "rampupvu": 2,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "GET MCP Tools List",
+          "method": "GET",
+          "url": "${BASE_URL}/mcp/tools",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ListResources",
+      "description": "List MCP resources",
+      "rampUp": {
+        "totalVU": 5,
+        "rampupvu": 2,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "GET MCP Resources List",
+          "method": "GET",
+          "url": "${BASE_URL}/mcp/resources",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ListPrompts",
+      "description": "List MCP prompts",
+      "rampUp": {
+        "totalVU": 5,
+        "rampupvu": 2,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "GET MCP Prompts List",
+          "method": "GET",
+          "url": "${BASE_URL}/mcp/prompts",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    }
+  ],
+  "thresholds": {
+    "http_req_duration": ["p(95)<5000", "p(99)<10000"],
+    "http_req_failed": ["rate<0.10"],
+    "http_reqs": ["rate>5"]
+  },
+  "environment_urls": {
+    "dev": "https://valid8-mcp.dev.walmart.com",
+    "stage": "https://valid8-mcp.stage.walmart.com",
+    "prod": "https://valid8-mcp.prod.walmart.com"
+  }
+}

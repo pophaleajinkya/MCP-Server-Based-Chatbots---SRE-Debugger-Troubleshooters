@@ -1,0 +1,463 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "OpenObserve MCP Server API",
+    "description": "MCP server for SQL queries, log analytics, and VRL validation against OpenObserve",
+    "version": "1.0.0",
+    "contact": {
+      "name": "O2 MCP Team"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8010",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Server Information",
+        "description": "Get server metadata including version and capabilities",
+        "operationId": "getServerInfo",
+        "tags": [
+          "Info"
+        ],
+        "responses": {
+          "200": {
+            "description": "Server information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerInfo"
+                },
+                "example": {
+                  "name": "OpenObserve MCP Server",
+                  "version": "1.0.0",
+                  "description": "MCP server for SQL queries, log analytics, and VRL validation against OpenObserve",
+                  "mcp_endpoint": "/mcp",
+                  "tools": 15,
+                  "resources": 8,
+                  "prompts": 2
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Liveness and readiness probe endpoint",
+        "operationId": "healthCheck",
+        "tags": [
+          "Health"
+        ],
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthStatus"
+                },
+                "example": {
+                  "status": "healthy",
+                  "version": "1.0.0",
+                  "tools": 15,
+                  "resources": 8,
+                  "prompts": 2
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mcp/tools": {
+      "get": {
+        "summary": "List MCP Tools",
+        "description": "Get list of all available MCP tools",
+        "operationId": "listTools",
+        "tags": [
+          "MCP"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of available tools",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolsList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mcp/resources": {
+      "get": {
+        "summary": "List MCP Resources",
+        "description": "Get list of all available MCP resources",
+        "operationId": "listResources",
+        "tags": [
+          "MCP"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of available resources",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourcesList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mcp/prompts": {
+      "get": {
+        "summary": "List MCP Prompts",
+        "description": "Get list of all available MCP prompt templates",
+        "operationId": "listPrompts",
+        "tags": [
+          "MCP"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of available prompts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromptsList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mcp": {
+      "post": {
+        "summary": "MCP Protocol Endpoint",
+        "description": "Main MCP protocol endpoint for tool execution (stateless HTTP)",
+        "operationId": "mcpProtocol",
+        "tags": [
+          "MCP"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MCPRequest"
+              },
+              "example": {
+                "jsonrpc": "2.0",
+                "method": "tools/list",
+                "params": {},
+                "id": "1"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "MCP response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPResponse"
+                }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - invalid JSON-RPC format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ServerInfo": {
+        "type": "object",
+        "required": [
+          "name",
+          "version",
+          "description",
+          "mcp_endpoint"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "OpenObserve MCP Server"
+          },
+          "version": {
+            "type": "string",
+            "example": "1.0.0"
+          },
+          "description": {
+            "type": "string"
+          },
+          "mcp_endpoint": {
+            "type": "string",
+            "example": "/mcp"
+          },
+          "tools": {
+            "type": "integer",
+            "example": 15
+          },
+          "resources": {
+            "type": "integer",
+            "example": 8
+          },
+          "prompts": {
+            "type": "integer",
+            "example": 2
+          }
+        }
+      },
+      "HealthStatus": {
+        "type": "object",
+        "required": [
+          "status",
+          "version"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "unhealthy"
+            ],
+            "example": "healthy"
+          },
+          "version": {
+            "type": "string",
+            "example": "1.0.0"
+          },
+          "tools": {
+            "type": "integer"
+          },
+          "resources": {
+            "type": "integer"
+          },
+          "prompts": {
+            "type": "integer"
+          }
+        }
+      },
+      "Tool": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "required_params": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ToolsList": {
+        "type": "object",
+        "properties": {
+          "tools": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tool"
+            }
+          }
+        }
+      },
+      "Resource": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string",
+            "example": "o2://docs/AGENT.md"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string",
+            "example": "text/markdown"
+          }
+        }
+      },
+      "ResourcesList": {
+        "type": "object",
+        "properties": {
+          "resources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Resource"
+            }
+          }
+        }
+      },
+      "ResourceContent": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "Prompt": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "required": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PromptsList": {
+        "type": "object",
+        "properties": {
+          "prompts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Prompt"
+            }
+          }
+        }
+      },
+      "MCPRequest": {
+        "type": "object",
+        "description": "MCP protocol JSON-RPC 2.0 request",
+        "required": ["jsonrpc", "method", "id"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "enum": ["2.0"],
+            "example": "2.0"
+          },
+          "method": {
+            "type": "string",
+            "example": "tools/list",
+            "description": "MCP method name (e.g., tools/list, tools/call, resources/list, prompts/list)"
+          },
+          "params": {
+            "type": "object",
+            "description": "Method parameters"
+          },
+          "id": {
+            "oneOf": [
+              {"type": "string"},
+              {"type": "number"}
+            ],
+            "example": "1"
+          }
+        }
+      },
+      "MCPResponse": {
+        "type": "object",
+        "description": "MCP protocol JSON-RPC 2.0 response",
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "enum": ["2.0"]
+          },
+          "result": {
+            "type": "object",
+            "description": "Response result"
+          },
+          "error": {
+            "type": "object",
+            "description": "Error object if request failed"
+          },
+          "id": {
+            "oneOf": [
+              {"type": "string"},
+              {"type": "number"}
+            ]
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "properties": {
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Info",
+      "description": "Server information and metadata"
+    },
+    {
+      "name": "Health",
+      "description": "Health check endpoints"
+    },
+    {
+      "name": "MCP",
+      "description": "Model Context Protocol endpoints"
+    }
+  ]
+}
+
+

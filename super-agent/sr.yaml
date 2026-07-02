@@ -1,0 +1,20 @@
+schemaVersion: 1.0.0
+notify:
+  slack:
+    channelName: gen-ai-ci-cd-alerts
+applications:
+  - key: SUPER-AGENT
+    name: SuperAgent
+    description: This application is for Super_Agent for Walmart International.
+    teamRostersProductId: 2249
+    environments:
+      - name: Dev
+        type: DEVELOPMENT
+        consumerIdInfos:
+          - consumerId: fbc0cf12-8ba7-4cae-a569-8e9d54c1c54b
+            publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn4jK4y76KeuuN6xYc4AmKDC3OIl5mYPJpnT+1wwfrNpLhrrRj4s/RwJ9e0Q8Snm6r3E4Aic+Znf8Dj15kZI3EJA4mxtJ+fZFJ8D4pI3r6ytYwpJXIeAOXijlg1tB1KFF3lLpEQ35n5uykORySq/56NAqOKzy8HpF0o+Y/GuWyyNJ0+eY3uthawAm48jA5Wer4Akm1uEhQ11vCOftO+rm0xb1E3oDWlEePiyFU3qAtN2pwXwkybzLIbGz8I5KmtNGvRmuxxIndqPUNl3f8EMarmYr32//44KnMQK2KJK/D3g6DFayWBKl+BHOeW6tzmDKbzkwR8XgK56nQ9S5LAShYwIDAQAB
+      - name: Prod
+        type: PRODUCTION
+        consumerIdInfos:
+          - consumerId: 6ca3827a-3034-4bc5-8b56-9f9309a2ed39
+            publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtmXqZ86ky+OCn2fHAS2m4AmBEMRcW8tMCw2n8YFiR475iK0OWLkycqVhrFL34EJEqi6S4EpMlXp0PjAsrzlmqYzRCV6/ifYcG28Aavr0jiP1yS1DBufT8ZGXOJDF6M2Nu6TwbYMDgy0tDgIMArTRf2CtVAFsH6SMQp+3skdQnZw6MIkffQKaTo4TihymoSNi8HJmFOAEB/qnQdnZqgPeyY02gepIxrSZLnPoLtDaLgexuiCnlCf1yn8ngbCFdONYWX/uwWIrzJr4TBYImjs8VWjBH/1Ex/JDTeY9TKCBckXLGrR/qFYP7KGFv7gsVcsKoPxGdBNsupWeqmOSWCA9JQIDAQAB

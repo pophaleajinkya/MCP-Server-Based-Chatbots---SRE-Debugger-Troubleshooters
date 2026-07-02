@@ -1,0 +1,81 @@
+{
+  "projectName": "sre-ai-ui",
+  "request": [
+    {
+      "transactionName": "HealthCheck",
+      "description": "Verify /api/health returns 200 OK",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "GET Health",
+          "method": "GET",
+          "url": "${BASE_URL}/api/health",
+          "headers": {
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "HealthLiveness",
+      "description": "Verify /health/liveness probe returns 200",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "GET Liveness Probe",
+          "method": "GET",
+          "url": "${BASE_URL}/health/liveness",
+          "headers": {
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "HealthReadiness",
+      "description": "Verify /health/readiness probe returns 200",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "GET Readiness Probe",
+          "method": "GET",
+          "url": "${BASE_URL}/health/readiness",
+          "headers": {
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    }
+  ],
+  "thresholds": {
+    "http_req_duration": ["p(95)<3000", "p(99)<8000"],
+    "http_req_failed": ["rate<0.10"],
+    "http_reqs": ["rate>5"]
+  },
+  "environment_urls": {
+    "dev": "https://sre.ai.dev.walmart.com",
+    "stage": "https://sre.ai.stage.walmart.com",
+    "prod": "https://sre.ai.walmart.com"
+  }
+}

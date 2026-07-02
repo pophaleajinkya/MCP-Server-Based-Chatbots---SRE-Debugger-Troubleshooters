@@ -1,0 +1,29 @@
+# Dependencies — always reinstalled inside container from package-lock.json
+node_modules
+
+# Next.js build output — built inside container
+.next
+
+# Local env files — secrets come from /secrets/ at runtime via instrumentation.ts
+.env.local
+.env*.local
+.env.test
+.env.test.*
+.env.*
+
+# Test & coverage artifacts
+coverage
+playwright-report
+test-results
+
+# Build artifacts
+build.log
+
+# Git
+.git
+.gitignore
+
+# Editor / OS
+.DS_Store
+*.swp
+*.swo

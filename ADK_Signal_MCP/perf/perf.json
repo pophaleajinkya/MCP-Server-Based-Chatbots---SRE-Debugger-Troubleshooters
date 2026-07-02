@@ -1,0 +1,64 @@
+{
+  "transactions": [
+    {
+      "name": "HealthCheck",
+      "request": {
+        "method": "GET",
+        "url": "/health"
+      },
+      "thresholds": {
+        "p95": 5000,
+        "p99": 10000,
+        "failureRate": 10
+      }
+    },
+    {
+      "name": "ServerInfo",
+      "request": {
+        "method": "GET",
+        "url": "/"
+      },
+      "thresholds": {
+        "p95": 5000,
+        "p99": 10000,
+        "failureRate": 10
+      }
+    },
+    {
+      "name": "MCP_ListTools",
+      "request": {
+        "method": "GET",
+        "url": "/mcp/tools"
+      },
+      "thresholds": {
+        "p95": 5000,
+        "p99": 10000,
+        "failureRate": 10
+      }
+    },
+    {
+      "name": "MCP_ListResources",
+      "request": {
+        "method": "GET",
+        "url": "/mcp/resources"
+      },
+      "thresholds": {
+        "p95": 5000,
+        "p99": 10000,
+        "failureRate": 10
+      }
+    },
+    {
+      "name": "MCP_ListPrompts",
+      "request": {
+        "method": "GET",
+        "url": "/mcp/prompts"
+      },
+      "thresholds": {
+        "p95": 5000,
+        "p99": 10000,
+        "failureRate": 10
+      }
+    }
+  ]
+}

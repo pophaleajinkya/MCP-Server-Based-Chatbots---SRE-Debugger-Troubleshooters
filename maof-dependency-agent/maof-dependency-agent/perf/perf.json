@@ -1,0 +1,408 @@
+{
+  "projectName": "maof-dependency-agent",
+  "request": [
+    {
+      "transactionName": "HealthCheck",
+      "description": "Health endpoint load test - lightweight baseline",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "Health Check",
+          "method": "GET",
+          "url": "${BASE_URL}/health",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "*/*"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "GetRoot",
+      "description": "Root endpoint load test - service info baseline",
+      "rampUp": {
+        "totalVU": 10,
+        "rampupvu": 5,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 5
+      },
+      "api": [
+        {
+          "name": "Get Root",
+          "method": "GET",
+          "url": "${BASE_URL}/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ListTools",
+      "description": "MCP Server - List available tools",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP tools/list",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/list",
+            "params": {},
+            "id": "perf-test-list-tools"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_WCNP_Dependencies",
+      "description": "MCP Server - fetch_wcnp_upstream_dependencies tool",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP fetch_wcnp_upstream_dependencies",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "fetch_wcnp_upstream_dependencies",
+              "arguments": {
+                "app_name": "payment-service",
+                "namespace": "sre-tools"
+              }
+            },
+            "id": "perf-test-wcnp"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_OneOps_Dependencies",
+      "description": "MCP Server - fetch_oneops_upstream_dependencies tool",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP fetch_oneops_upstream_dependencies",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "fetch_oneops_upstream_dependencies",
+              "arguments": {
+                "org": "walmart-intl",
+                "assembly": "payments-prod",
+                "platform": "pay-platform"
+              }
+            },
+            "id": "perf-test-oneops"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ManagedService_Dependencies",
+      "description": "MCP Server - fetch_cassandra_upstream_dependencies tool",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP fetch_cassandra_upstream_dependencies",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "fetch_cassandra_upstream_dependencies",
+              "arguments": {
+                "assembly": "mx-rms",
+                "platform": "rmsag2"
+              }
+            },
+            "id": "perf-test-managed-service"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_ListAppsInNamespace",
+      "description": "MCP Server - list_apps_in_namespace tool",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP list_apps_in_namespace",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "list_apps_in_namespace",
+              "arguments": {
+                "namespace": "sre-tools"
+              }
+            },
+            "id": "perf-test-list-apps"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_WCNP_Downstream_Dependencies",
+      "description": "MCP Server - fetch_wcnp_downstream_dependencies tool",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP fetch_wcnp_downstream_dependencies",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "fetch_wcnp_downstream_dependencies",
+              "arguments": {
+                "app_name": "payment-service",
+                "namespace": "sre-tools"
+              }
+            },
+            "id": "perf-test-wcnp-downstream"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_OneOps_Downstream_Dependencies",
+      "description": "MCP Server - fetch_oneops_downstream_dependencies tool",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP fetch_oneops_downstream_dependencies",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "fetch_oneops_downstream_dependencies",
+              "arguments": {
+                "org": "walmart-intl",
+                "assembly": "payments-prod",
+                "platform": "pay-platform"
+              }
+            },
+            "id": "perf-test-oneops-downstream"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_WCNP_DependencyGraph",
+      "description": "MCP Server - get_wcnp_dependency_graph tool (Mermaid)",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP get_wcnp_dependency_graph",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "get_wcnp_dependency_graph",
+              "arguments": {
+                "app_name": "payment-service",
+                "namespace": "sre-tools"
+              }
+            },
+            "id": "perf-test-wcnp-graph"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_OneOps_DependencyGraph",
+      "description": "MCP Server - get_oneops_dependency_graph tool (Mermaid)",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP get_oneops_dependency_graph",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "get_oneops_dependency_graph",
+              "arguments": {
+                "org": "walmart-intl",
+                "assembly": "payments-prod",
+                "platform": "pay-platform"
+              }
+            },
+            "id": "perf-test-oneops-graph"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    },
+    {
+      "transactionName": "MCP_Cassandra_DependencyGraph",
+      "description": "MCP Server - get_cassandra_dependency_graph tool (Mermaid)",
+      "rampUp": {
+        "totalVU": 3,
+        "rampupvu": 1,
+        "rampduration": 1,
+        "holdrampup": 1,
+        "duration": 3
+      },
+      "api": [
+        {
+          "name": "MCP get_cassandra_dependency_graph",
+          "method": "POST",
+          "url": "${BASE_URL}/mcp/",
+          "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+          },
+          "body": {
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "name": "get_cassandra_dependency_graph",
+              "arguments": {
+                "assembly": "mx-rms",
+                "platform": "rmsag2"
+              }
+            },
+            "id": "perf-test-cassandra-graph"
+          },
+          "expectedResponseCode": 200
+        }
+      ]
+    }
+  ],
+  "thresholds": {
+    "http_req_duration": ["p(95)<5000", "p(99)<10000"],
+    "http_req_failed": ["rate<0.10"],
+    "http_reqs": ["rate>5"]
+  },
+  "environment_urls": {
+    "dev": "https://maof-dependency-agent.dev.walmart.com",
+    "stage": "https://maof-dependency-agent.stage.walmart.com",
+    "prod": "https://maof-dependency-agent.walmart.com"
+  }
+}
+

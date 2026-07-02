@@ -1,0 +1,53 @@
+profiles:
+  - basic-docker-build
+  - git://intl-ecomm-svcs:health-agent:main:kitt-stageGates
+
+setup:
+  releaseRefs: ["main"]
+  featureFlagMap:
+    buildWhenStageRefMatches: true
+
+services:
+  - path: kitt/kitt-sre.yml
+  - path: kitt/kitt-governance.yml
+  - path: kitt/kitt-act.yml
+
+owner:
+  group: IntlSRE
+
+notify:
+  msTeams:
+    channelId: 19%3af2b1e51c12cb486a97d2b5d555a9519a%40thread.tacv2
+  slack:
+    channelName: gen-ai-ci-cd-alerts
+
+deploy:
+  namespace: sre-tools
+  releaseType:
+    rollbackOnError: true
+    waitForReady: true
+    deployTimeout: 500
+  stages:
+    - name: dev
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-dev-az-003']
+      refs: ['main', 'group_variations_v1']
+
+    - name: stage
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-stage-az-003', 'uscentral-stage-az-305']
+      refs: ['main']
+
+    - name: prod
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-prod-az-006', 'uswest-prod-az-334']
+      refs: ['main']

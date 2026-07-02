@@ -1,0 +1,20 @@
+schemaVersion: 1.0.0
+notify:
+  slack:
+    channelName: gen-ai-ci-cd-alerts
+applications:
+  - key: DEPENDENCY-AGENT
+    name: DependencyAgent
+    description: This application is for Dependency_Agent for Walmart International.
+    teamRostersProductId: 2249
+    environments:
+      - name: Dev
+        type: DEVELOPMENT
+        consumerIdInfos:
+          - consumerId: 00d40dbb-23a9-4124-ad0a-e273b482301f
+            publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlPz+HPU9uRz+Crq/W0tzt+LdotZIvrcq0EbM1sYTorrLziPps2MlkbI9i6CQmr6WPGiUT77cc7hYIkfdyESvuV7cFlRr4uwmmyduSIXUhcJ9xcfr6WJl4pcYxlHHtwzA1GXmNr0Ay6FG8xuNz/v7KBhl5RT4czG2Y+YKan8a2qWrptSSEN2e0XoPN5BxFZPTMcRTFcPDo/BTTTg0GqHk/QrjL593fv9YpqIYAdexZqL4trx2JZFTevdsijE8iBnTFZFedzsmKs4jVwZEPVSlbIAuf0NN+V0TkiIGLx13LQF0QXra2dUSihNdKALnmK83fNHptjl0B5YPelllDfsgoQIDAQAB
+      - name: Prod
+        type: PRODUCTION
+        consumerIdInfos:
+          - consumerId: e1ff28d4-6c58-4924-9ffe-5b9ebc524800
+            publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzujlRXO5MIqVd9lGax247ggBEC91wvuGCGorg9ZoszIlZg3legnGZA0Fw6go/WL7sU+/TR8EO2/uvk2Pu16GclIokfMuokNRnTmPpL3lXf6eBzj/Ce+l0gW+QC1X7ThIcQjE84gzCFRbiMnWr7lX1oifvPwhGjArY/7GRZri0zjTchEYKng81tik2vGkPq1vcHku4nc6gqmpv9wZlg/X2kt+zbJ6QI70SZTwjJN8qW6X71XxXC7zEcGsDpNLdyxmG/B6L6T7QGwf+WBdnzOFPG9ExuRs2CANVdl9QvmxOQEUnorL2zK6DtNnt+zREK8NcJJ1Ut7TT51S2efCgKe7IwIDAQAB

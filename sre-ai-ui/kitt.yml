@@ -1,0 +1,317 @@
+setup:
+  featureFlagMap:
+    useArtifactory: true
+    imageValidation: false
+    buildWhenStageRefMatches: true
+  releaseRefs: ["main"]
+
+profiles:
+  - nextjs-electrode-v1
+  - electrode-aggr-whitelist
+  - git://Intl-Architecture-Developer-Tools:stage-gates:master:stage-gates
+
+owner:
+  group: Intl ARCS - AC - Azure ACT Developer
+
+notify:
+  msTeams:
+    channelId: 19%3af2b1e51c12cb486a97d2b5d555a9519a%40thread.tacv2
+  slack:
+    channelName: gen-ai-ci-cd-alerts
+
+build:
+  docker:
+    app:
+      dockerFile: Dockerfile
+      buildArgs:
+        enableTestReporting: true
+        nodeVersion: 20.12.2
+        nodeImage: -slim
+        looper_run_id: $LOOPER_RUN_ID
+        cpd: $concordProcessId
+        buildUrl: $BUILD_URL
+        looperId: $LOOPER_RUN_ID
+        job_name: $JOB_NAME
+        job_url: $JOB_URL
+        jenkins_url: $JENKINS_URL
+        looper_job_type: $LOOPER_JOB_TYPE
+        github_repo_git_url: "{{$.kitt.build.commitEvent.repo.url}}"
+        github_branch_name: "{{ $.kitt.build.commitEvent.currentBranch }}"
+        tbBuildVersion: "{{ $.kitt.build.version }}"
+        sonarEnable: 'true'
+  postBuild:
+    - concord:
+        name: SonarQube Validator
+        enabled: true
+        arguments:
+          config:
+            sonarCheck:
+              projectKey: 'sre-ai-ui'
+              threshold: 80
+              mode: 'Passive'
+
+deploy:
+  namespace: access-control-tower
+  releaseType:
+    rollbackOnError: true
+    waitForReady: true
+    deployTimeout: 500
+  helm:
+    values:
+      min:
+        cpu: 400m
+        memory: 1G
+      max:
+        cpu: 800m
+        memory: 2G
+      scaling:
+        enabled: true
+        cpuPercent: 80
+        min: 1
+        max: 3
+      networking:
+        pathPrefix: /
+        httpsEnabled: true
+        httpEnabled: true
+        httpsRedirect: true
+        internalPort: 3000
+        externalPort: 8080
+      startupProbe:
+        enabled: true
+        wait: 30
+        probeInterval: 10
+        failureThreshold: 18
+        timeout: 4
+        path: "/health"
+        port: 3000
+      livenessProbe:
+        enabled: true
+        path: "/health/liveness"
+        wait: 120
+        port: 3000
+        timeout: 4
+        probeInterval: 20
+        failureThreshold: 3
+      readinessProbe:
+        enabled: true
+        path: "/health/readiness"
+        wait: 120
+        timeout: 4
+        port: 3000
+        probeInterval: 20
+        failureThreshold: 2
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+      global:
+        metrics:
+          enabled: true
+
+  gslb:
+    enabled: true
+    lbRoutings:
+      dev:
+        cnames: [sre.ai.dev.walmart.com]
+        matchStages: [dev]
+      stage:
+        cnames: [sre.ai.stage.walmart.com]
+        matchStages: [stage]
+      prod:
+        cnames: [sre.ai.walmart.com]
+        matchStages: [prod]
+
+  stages:
+    - name: dev
+      target:
+        cluster_id: ["useast-dev-az-002"]
+      refs: ["main"]
+      helm:
+        values:
+          env:
+            appName: sre-bot-ui
+            environment: dev
+            NODE_ENV: development
+            ONEOPS_ENVIRONMENT: dev
+            ONEOPS_ENVPROFILE: DEV
+            wm.app: SRE-AI-UI
+            wm.env: Dev
+          secrets:
+            akeyless: true
+            file_refresh: true
+            files:
+              - destination: .env.sre-bot-ui
+                content: sre-bot-ui/dev/config
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/Intl ARCS - AC - Azure ACT Developer
+          metadata:
+            labels:
+              wm.app: SRE-AI-UI
+              wm.env: Dev
+          scaling:
+            enabled: false
+      preDeploy:
+        - concord:
+            name: Integration Test
+            enabled: true
+            arguments:
+              config:
+                git:
+                  orgName: "{{$.kitt.build.commitEvent.repo.org}}"
+                  repoName: "{{$.kitt.build.commitEvent.repo.name}}"
+                  branchName: "{{$.kitt.build.commitEvent.currentBranch}}"
+                  looperFile: .looper.yml
+                endToEndTesting:
+                  call: IntegrationTest
+                  mode: Active
+                  env: pqa
+                  threshHold: 80
+                  artifactId: "{{$.kitt.build.artifact}}"
+                  releaseVersion: "{{$.kitt.build.version}}"
+      postDeploy:
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: "api-spec.json"
+                contractTest:
+                  cname: "https://sre.ai.dev.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+
+    - name: stage
+      approvers:
+        groups:
+          - "Intl ARCS - AC - Azure ACT Developer"
+      target:
+        cluster_id: ["useast-stage-az-302", "scus-stage-a4"]
+      refs: ["main"]
+      helm:
+        values:
+          env:
+            appName: sre-bot-ui
+            environment: stage
+            NODE_ENV: stage
+            ONEOPS_ENVIRONMENT: qa
+            ONEOPS_ENVPROFILE: QA
+            wm.app: SRE-AI-UI
+            wm.env: Dev
+          secrets:
+            akeyless: true
+            file_refresh: true
+            files:
+              - destination: .env.sre-bot-ui
+                content: sre-bot-ui/stage/config
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/Intl ARCS - AC - Azure ACT Developer
+          metadata:
+            labels:
+              wm.app: SRE-AI-UI
+              wm.env: Dev
+      postDeploy:
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: "api-spec.json"
+                contractTest:
+                  cname: "https://sre.ai.stage.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test-stage
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+
+    - name: prod
+      approvers:
+        groups:
+          - "Intl ARCS - AC - Azure ACT Developer"
+      target:
+        cluster_id: ["eus2-prod-a44", "scus-prod-a56"]
+      refs: ["main"]
+      helm:
+        values:
+          env:
+            appName: sre-bot-ui
+            environment: prod
+            NODE_ENV: production
+            ONEOPS_ENVIRONMENT: prod
+            ONEOPS_ENVPROFILE: PROD
+            wm.app: SRE-AI-UI
+            wm.env: Prod
+          secrets:
+            akeyless: true
+            file_refresh: true
+            files:
+              - destination: .env.sre-bot-ui
+                content: sre-bot-ui/prod/config
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/Intl ARCS - AC - Azure ACT Developer
+          metadata:
+            labels:
+              wm.app: SRE-AI-UI
+              wm.env: Prod
+      postDeploy:
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: "api-spec.json"
+                contractTest:
+                  cname: "https://sre.ai.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test-prod
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+              

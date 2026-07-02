@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "a2a-health-agent"
+version = "1.0.0"
+description = "A2A WCNP Health Agent — FastAPI + MCP + Claude/OpenAI"
+
+requires-python = ">=3.11"
+
+dependencies = [
+    "fastapi>=0.115.8",
+    "uvicorn[standard]>=0.30.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "httpx>=0.27.0",
+    "pyyaml>=6.0.0",
+    "redis[hiredis]>=5.0.0",
+    "google-adk>=1.28.0",
+    "a2a-sdk>=0.3.0",
+    "a2ui-agent @ git+https://github.com/google/A2UI.git#subdirectory=agent_sdks/python",
+    "google-cloud-storage>=3.0.0",
+    "litellm>=1.0.0",
+    "mcp[cli]>=1.0.0",
+    "pytest>=6.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "walmart-devtools-pytest-reporter-testburst~=0.0.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=5.0.0",
+    "coverage>=7.0.0",
+    "httpx>=0.27.0",
+    # Contract testing — schema validation for consumer-driven contracts
+    "jsonschema>=4.0.0",
+    # respx — httpx mock transport for integration tests (mcp_validate)
+    "respx>=0.21.0",
+]
+
+[[tool.uv.index]]
+name = "walmart-pypi"
+url = "https://pypi.ci.artifacts.walmart.com/artifactory/api/pypi/pythonhosted-pypi-release-remote/simple/"
+default = true
+
+[[tool.uv.index]]
+name = "walmart-devtools-pypi"
+url = "https://pypi.ci.artifacts.walmart.com/artifactory/api/pypi/devtools-pypi/simple/"
+
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/app", "src/agent"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "tests/*",
+    "src/app/mcp/probe.py",
+    "src/main.py",
+    "src/agent/*",
+    "src/app/factory.py",                    # requires live Redis + Google ADK credentials
+    "src/app/store/redis_session_service.py", # pure Redis infrastructure; tested via integration
+]

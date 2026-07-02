@@ -1,0 +1,49 @@
+# A2A remote subagent config for local development.
+#
+# Usage:
+#   1. Copy this file:  cp a2a_agents.yml.example a2a_agents.yml
+#   2. Edit with your local agent URLs
+#   3. Add to your .env:
+#        AGENT_ENV=local
+#        A2A_AGENTS_FILE=./a2a_agents.yml
+#
+# a2a_agents.yml is gitignored — never commit it.
+#
+# Fields per agent:
+#   name        — unique identifier (snake_case recommended).
+#                 Used as the FunctionTool name shown to the orchestrator LLM.
+#                 Hyphens are auto-converted to underscores.
+#   url         — base URL of the remote A2A agent (no trailing slash).
+#                 Agent Card is fetched from {url}/.well-known/agent.json
+#                 A2A calls go to             {url}/a2a
+#   enabled     — set false to disable without removing the entry
+#   description — optional; overrides the Agent Card description.
+#                 Leave empty → super-agent auto-fetches from /.well-known/agent.json
+#   headers     — optional auth headers forwarded on every A2A call
+#                 e.g. {Authorization: "Bearer <token>", X-Api-Key: "..."}
+#
+# Production / non-local envs:
+#   Stored as a JSON array in Redis at:
+#     super_agent:config:a2a_agents:<AGENT_ENV>:<AGENT_GROUP>:config
+#   Same schema as below but serialised as JSON.
+
+a2a_agents:
+
+  - name: sre_agent
+    url: http://localhost:8002
+    enabled: true
+    description: ""      # leave empty → auto-discovered from /.well-known/agent.json
+    headers: {}
+
+  - name: deploy_agent
+    url: http://localhost:8003
+    enabled: true
+    description: "Handles deployment pipeline queries, rollback decisions, and release status."
+    headers: {}
+
+  - name: k8s_agent
+    url: http://localhost:8004
+    enabled: false       # disabled — won't be loaded at startup
+    description: "Kubernetes cluster operations: pod inspection, log retrieval, resource scaling."
+    headers:
+      X-Internal-Token: "dev-token-replace-me"

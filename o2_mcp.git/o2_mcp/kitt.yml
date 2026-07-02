@@ -1,0 +1,283 @@
+setup:
+  featureFlagMap:
+    useArtifactory: true
+    imageValidation: false
+  releaseRefs: ["main"]
+owner:
+  group: IntlSRE
+profiles:
+  - basic-docker-build
+  - git://intl-ecomm-svcs:o2_mcp:test_cases:kitt-stageGates
+build:
+  skip: false
+  docker:
+    app:
+      dockerFile: Dockerfile
+      runtime: python
+      buildArgs:
+        pythonVersion: 3.11-slim
+        sonarEnable: true
+        enableTestReporting: true
+        skipCodeCoverage: false
+        cpd: ${concordProcessId}
+        BUILDURL: ${BUILD_URL}
+        LOOPERID: ${LOOPER_RUN_ID}
+        job_name: $JOB_NAME
+        job_url: $JOB_URL
+        jenkins_url: $JENKINS_URL
+        looper_run_id: $LOOPER_RUN_ID
+        github_repo_git_url: $GITHUB_REPO_GIT_URL
+        github_branch_name: "{{ $.kitt.build.commitEvent.currentBranch }}"
+        looper_job_type: $LOOPER_JOB_TYPE
+        sonarProjKey: "{{ $.kitt.build.commitEvent.repo.org}}:{{ $.kitt.build.commitEvent.repo.name}}"
+        sonarOpts: "-Dproject.settings=sonar-project.properties
+                            -Dsonar.branch.name={{ $.kitt.build.commitEvent.currentBranch }}
+                            -Dsonar.projectVersion={{ $.kitt.build.version }}
+                            -Dsonar.scm.revision={{ $.kitt.build.commitEvent.commitId }}
+                            -Dsonar.analysis.buildVersion={{ $.kitt.build.version }}
+                            -Dsonar.analysis.buildNumber=${LOOPER_RUN_ID}
+                            -Dsonar.analysis.buildUrl=${BUILD_URL}"
+deploy:
+  namespace: sre-tools
+  releaseType:
+    rollbackOnError: true
+    waitForReady: true
+    deployTimeout: 500
+  helm:
+    values:
+      min:
+        cpu: 2000m
+        memory: 6G
+      max:
+        cpu: 2000m
+        memory: 6G
+      scaling:
+        enabled: "true"
+        cpuPercent: 80
+        min: 1
+        max: 4
+      startupProbe:
+        enabled: "true"
+        wait: 30
+        probeInterval: 10
+        failureThreshold: 18
+        timeout: 5
+        path: "/health"
+        headers: "*/*"
+        port: 8010
+      livenessProbe:
+        path: "/health/liveness"
+        wait: 120
+        port: 8010
+        timeout: 5
+        failureThreshold: 10
+      readinessProbe:
+        path: "/health/readiness"
+        wait: 120
+        port: 8010
+        timeout: 5
+        failureThreshold: 10
+      networking:
+        pathPrefix: /
+        externalPort: "8010"
+        internalPort: "8010"
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+  gslb:
+    enabled: true
+    lbRoutings:
+      dev:
+        cnames: [ o2-mcp.dev.walmart.com ]
+        matchStages: [ dev ]
+      stage:
+        cnames: [ o2-mcp.stage.walmart.com ]
+        matchStages: [ stage ]
+      prod:
+        cnames: [ o2-mcp.prod.walmart.com ]
+        matchStages: [ prod ]
+
+  stages:
+    - name: dev
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-dev-az-003']
+      refs: ['main' , 'test_cases']
+      helm:
+        values:
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.o2_mcp
+                content: o2_mcp/dev/config
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE
+          metadata:
+            labels:
+              wm.app: OO-MCP
+              wm.env: Dev
+      preDeploy:
+        - concord:
+            name: Integration Test
+            enabled: true
+            arguments:
+              config:
+                git:
+                  orgName: '{{$.kitt.build.commitEvent.repo.org}}'
+                  repoName: '{{$.kitt.build.commitEvent.repo.name}}'
+                  branchName: '{{$.kitt.build.commitEvent.currentBranch}}'
+                  looperFile: .looper.yml
+                endToEndTesting:
+                  call: IntegrationTest
+                  mode: Active
+                  env: pqa
+                  threshHold: 80
+                  artifactId: '{{$.kitt.build.artifact}}'
+                  releaseVersion: '{{$.kitt.build.version}}'
+      postDeploy:
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: 'api-spec.json'
+                contractTest:
+                  cname: "https://o2-mcp.dev.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+
+    - name: stage
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-stage-az-003', 'uscentral-stage-az-305']
+      refs: ['main']
+      helm:
+        values:
+          scaling:
+            enabled: "true"
+            cpuPercent: 50
+            min: 3
+            max: 20
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.o2_mcp
+                content: o2_mcp/stage/config
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE
+          metadata:
+            labels:
+              wm.app: OO-MCP
+              wm.env: Stage
+      postDeploy:
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test-stage
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: 'api-spec.json'
+                contractTest:
+                  cname: "https://o2-mcp.stage.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+
+    - name: prod
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-prod-az-006', 'uswest-prod-az-334']
+      refs: ['main']
+      helm:
+        values:
+          scaling:
+            enabled: "true"
+            cpuPercent: 50
+            min: 2
+            max: 40
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.o2_mcp
+                content: o2_mcp/prod/config
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE
+          metadata:
+            labels:
+              wm.app: OO-MCP
+              wm.env: Prod
+      postDeploy:
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test-prod
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: 'api-spec.json'
+                contractTest:
+                  cname: "https://o2-mcp.prod.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+
+notify:
+  msTeams:
+    channelId: 19%3af2b1e51c12cb486a97d2b5d555a9519a%40thread.tacv2
+  slack:
+    channelName: gen-ai-ci-cd-alerts

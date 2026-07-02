@@ -1,0 +1,18 @@
+# sr.yaml
+
+schemaVersion: 1.0.0
+notify:
+  slack:
+    channelName: gen-ai-ci-cd-alerts
+applications:
+  - key: VALID8-MCP
+    name: valid-mcp
+    organization: GeC
+    environments:
+      - name: dev
+        type: DEVELOPMENT
+      - name: prod
+        type: PRODUCTION
+      - name: stage
+        type: STAGING
+

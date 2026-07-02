@@ -1,0 +1,46 @@
+# macOS
+.DS_Store
+
+# temporarily-renamed nested git dirs (should never be tracked)
+**/.git.disabled/
+**/.git.disabled
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.tox/
+**/.coverage
+**/coverage.xml
+**/htmlcov/
+**/.venv/
+**/venv/
+**/env/
+
+# Node
+**/node_modules/
+**/.next/
+**/dist/
+**/build/
+**/.turbo/
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Env / secrets
+**/.env
+**/.env.local
+**/.env.*.local
+**/mcp_servers_local.yml
+**/*.pem
+**/*.key

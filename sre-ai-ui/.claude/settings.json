@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo \"# Drop screenshot PNGs here\\\\n# They will be served at /howto/<filename>.png\")",
+      "Bash(npx tsc:*)",
+      "Bash(for f:*)",
+      "Bash(do)",
+      "Bash(sed -i '' 's/jest.mock\\(\"\"@\\\\/lib\\\\/auth-server\"\", \\(\\) => \\({\\\\n  getSessionCookie: jest.fn\\(\\),\\\\n  SESSION_COOKIE: \"\"sre_ai_session\"\",\\\\n}\\)\\);/PLACEHOLDER/' \"$f\")",
+      "Bash(done)"
+    ]
+  }
+}

@@ -1,0 +1,81 @@
+{
+    "global": [
+        "Always call get_stream_schema before the first execute_sql in any session — schema reveals available fields, FTS keys, and partition keys.",
+        "Always inject the default_filter from connect_o2 into every SQL WHERE clause to scope logs to the specific namespace and app.",
+        "Always run validate_sql_policy before execute_sql to catch ADL-specific violations instantly.",
+        "Be concise and accurate. Show field names, counts, and error rates — not walls of raw log text."
+    ],
+    "sql": [
+        "NEVER add _timestamp in WHERE clause. OpenObserve automatically applies the time range. Manual _timestamp filters cause queries to fail or return wrong data.",
+        "Always quote stream names with double quotes in FROM clause: FROM \"stream_name\" — not FROM stream_name.",
+        "Use count(_timestamp) for aggregations, NEVER count(*). OpenObserve does not support count(*).",
+        "NEVER SELECT * — always name specific fields. SELECT * pulls _raw which is large and slow.",
+        "For full-text search on full_text_search_keys (FTS-indexed fields): use match_all('keyword'). Example: WHERE match_all('connection refused').",
+        "For fields NOT in full_text_search_keys: use str_match_ignore_case(field, 'keyword'). Example: WHERE str_match_ignore_case(level, 'error').",
+        "For histogram time series: histogram(_timestamp, 'interval') — supported intervals: second, minute, hour, day, week.",
+        "Use DataFusion-compatible SQL syntax only. PostgreSQL, MySQL, and standard ANSI functions may not work.",
+        "Only use defined_schema_fields in SELECT and WHERE clauses. Fields NOT in the schema are stored in _raw as a JSON string — extract them with: spath(_raw, 'field_name') for nested paths, or spath(_raw, 'key') for top-level keys.",
+        "Partition key fields in WHERE clause dramatically speed up queries by reducing scan size — always filter on partition keys first.",
+        "CTE RULE: Every column referenced in the outer query MUST be explicitly selected inside the CTE. Common mistake: using count(_timestamp) in the outer query while the CTE only selects other columns. Fix: include _timestamp inside the CTE SELECT list.",
+        "Array fields are stored as stringified JSON arrays. Cast to native array before unnesting: unnest(cast_to_arr(field)). Example: SELECT unnest(cast_to_arr(tags)) AS tag FROM \"k8s_json\".",
+        "For error rate calculation use FILTER WHERE clause: count(_timestamp) FILTER (WHERE CAST(status_code AS INT) >= 500).",
+        "For percentile queries: approx_percentile_cont(response_time_ms, 0.99) for P99. Use 0.95 for P95, 0.50 for P50/median.",
+        "When a user asks a generic question, build a dynamic SQL query — do NOT give up saying 'cannot do that'. Use CASE, CAST, arithmetic, string functions, CTEs, and window functions to compose a solution."
+    ],
+    "vrl": [
+        "Use Rust regex syntax for all regex patterns — NOT Python regex.",
+        "Always use named capture groups in parse_regex patterns: (?P<name>...) not (?<name>...).",
+        "Define regex patterns in separate variables before passing to parse_regex: pattern = r'^...$'",
+        "parse_regex returns a tuple — always capture both value and error: .parsed, err = parse_regex(.message, pattern)",
+        "Use ! (bang) for fallible functions that return a single value: .status = to_int!(.status_code)",
+        "Do NOT use ! for functions that return a tuple: parsed, err = parse_regex(...) — no bang here.",
+        "NEVER overwrite the _timestamp field.",
+        "Always put regex patterns on a single line — multi-line patterns cause parse errors.",
+        "Extract parsed fields to a new sub-object to avoid field collisions: .parsed_log = parse_regex!(.message, pattern)"
+    ],
+    "query_builder": [
+        "Start every query session with: get_stream_schema(user_prompt=<original question>) to discover fields.",
+        "Check schema settings.full_text_search_keys to decide between match_all() and str_match_ignore_case().",
+        "Check schema settings.partition_keys to decide the best WHERE clause field ordering.",
+        "Always apply default_filter first in WHERE, then add additional filters.",
+        "For 5XX analysis: filter CAST(status_code AS INT) >= 500 grouped by status_code and endpoint.",
+        "For error trend: histogram(_timestamp, 'minute') with count and error count for time-series view.",
+        "For latency analysis: approx_percentile_cont(response_time_ms, 0.99) grouped by endpoint.",
+        "For log search: use match_all() on FTS fields, str_match_ignore_case() on non-FTS fields.",
+        "Never hardcode timestamps — use get_time to get microsecond values, pass as start_time/end_time."
+    ],
+    "query_optimization": [
+        "Always put partition key filters first in WHERE clause — this reduces scan size before other filters are applied.",
+        "Prefer match_all() over str_match_ignore_case() for fields in full_text_search_keys — FTS uses an inverted index (O(log N)) vs full scan (O(N)).",
+        "Avoid SELECT * — name only the fields you need. _raw is a large JSON string that bloats response size.",
+        "Use LIMIT to cap result size during exploration — increase only after confirming query correctness.",
+        "For aggregation queries with many groups, add LIMIT to prevent scanning all distinct values.",
+        "Use validate_sql(sql) with a 1-second window to confirm query syntax before running over large time ranges.",
+        "For repeated queries on the same stream, reuse the schema — do not call get_stream_schema on every query.",
+        "When a query is slow, check if the WHERE clause uses partition keys. If not, add partition key filters."
+    ],
+    "log_analysis": [
+        "For error investigation: start with error count grouped by status_code and endpoint, then drill into specific error messages.",
+        "Error rate = errors / total requests. Threshold: >1% is notable, >5% is degraded, >10% is incident-level.",
+        "For latency analysis: P99 > 2× baseline indicates degradation. P99 > 5× is severe.",
+        "For 5XX errors: group by status_code and request_path to identify the most impacted endpoint.",
+        "Always check error trend over time (histogram by minute) to determine if errors are spiking, sustained, or recovering.",
+        "After finding errors in execute_sql, use search_around(timestamp=<error _timestamp>) to get surrounding log context.",
+        "Compare error rates across time windows: last 1h vs last 24h to determine if this is a new issue or ongoing.",
+        "For correlating with infrastructure: after finding log errors, suggest checking health_mcp wcnp_analyze for CPU/memory/istio issues.",
+        "If no results: suggest (1) broader time_range, (2) verify stream name with list_streams, (3) check default_filter field names against schema.",
+        "Present results as: total count + error breakdown + sample error messages + recommended follow-up queries."
+    ],
+    "vrl_builder": [
+        "For log parsing, start with parse_regex on the main log field to extract structured fields.",
+        "For JSON logs, use parse_json to decode nested structures from string fields.",
+        "For enrichment, use external lookups or static mapping with CASE-like logic in VRL.",
+        "Always test VRL with sample events using validate_vrl before deploying to a pipeline."
+    ],
+    "vrl_optimization": [
+        "Minimize the number of regex operations — compile patterns once as variables, reuse them.",
+        "Prefer built-in parsing functions (parse_nginx_log, parse_key_value, parse_json) over custom regex when the log format matches.",
+        "Use early returns to skip processing for log entries you don't need to transform.",
+        "Avoid redundant field assignments — check if a field exists before setting it."
+    ]
+}

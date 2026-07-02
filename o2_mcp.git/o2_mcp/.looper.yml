@@ -1,0 +1,85 @@
+tools:
+  python: 3.11
+
+parameters:
+  - releaseVersion: { type: string }
+  - artifactId: { type: string }
+  - testBurstRunId: { type: string }
+  - testrunid: { type: string }
+  - env: { type: string }
+  - concordId: { type: string }
+  - buildUrl: { type: string }
+  - looperRunId: { type: string }
+
+envs:
+  global:
+    variables:
+      ALLOW_ARTIFACTORY: "true"
+
+docker:
+  - name: 'python-agent'
+    image: 'docker.ci.artifacts.walmart.com/devtools-docker/python-looper-agent:3.12-main'
+
+flows:
+  default:
+    - call: EndToEndTest
+    - call: IntegrationTest
+
+
+  EndToEndTest:
+    - if: $testrunid
+      then:
+        - shell: echo "Job Triggered Externally with RUN ID $testrunid"
+      else:
+        - var(testrunid): date '+%Y-%m-%d_%H-%M-%S-%3N'
+    - dockerAgent(python):
+        - shell: |
+            export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+            export UV_NATIVE_TLS=1
+            echo "Creating README.md"
+            touch README.md
+            echo "Installing dependencies with pip"
+            pip install uv --index-url https://pypi.ci.artifacts.walmart.com/artifactory/api/pypi/external-pypi/simple
+            uv sync
+            echo "Running E2E tests and generating reports"
+            export TESTTYPE="e2e" \
+               ENV=${env} \
+               TESTRUNID=${testrunid} \
+               CONCORDID=${concordId} \
+               BUILDURL=${buildUrl} \
+               LOOPERID=${looperRunId} \
+               testLogs="true" \
+               testburstLogs="true" \
+               disableTestburst="false"
+            echo "Running E2E tests with TestBurst reporting"
+            uv run pytest tests/e2e --maxfail=1 --disable-warnings \
+              --junitxml=results.xml -v --tb=short
+
+  IntegrationTest:
+    - if: $testrunid
+      then:
+        - shell: echo "Job Triggered Externally with RUN ID $testrunid"
+      else:
+        - var(testrunid): date '+%Y-%m-%d_%H-%M-%S-%3N'
+    - dockerAgent(python):
+        - shell: |
+            export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+            export UV_NATIVE_TLS=1
+            echo "Creating README.md"
+            touch README.md
+            echo "Installing dependencies with pip"
+            pip install uv --index-url https://pypi.ci.artifacts.walmart.com/artifactory/api/pypi/external-pypi/simple
+            uv sync
+            echo "Running Integration tests and generating reports"
+            export TESTTYPE="integration" \
+               ENV=${env} \
+               TESTRUNID=${testrunid} \
+               CONCORDID=${concordId} \
+               BUILDURL=${buildUrl} \
+               LOOPERID=${looperRunId} \
+               testLogs="true" \
+               testburstLogs="true" \
+               disableTestburst="false"
+            echo "Running Integration tests with TestBurst reporting"
+            uv run pytest tests/integration --maxfail=1 --disable-warnings \
+              --junitxml=results.xml -v --tb=short

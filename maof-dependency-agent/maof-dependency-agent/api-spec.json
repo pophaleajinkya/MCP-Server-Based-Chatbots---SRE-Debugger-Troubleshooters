@@ -1,0 +1,200 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Dependency Agent API",
+    "description": "Agent to fetch dependencies from different sources and return unique dependencies.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/dependencies": {
+      "post": {
+        "summary": "Parses the query using LLM to extract app_name and namespace\n                    Routes based on extracted parameters:\n                       - Both app_name and namespace → fetch dependencies\n                       - Only namespace → suggest dependencies (return list of apps)\n                       - Neither → return error\n                    Executes the appropriate action\n                    Returns structured results in AgentResponse format",
+        "description": "Process a query with session ID using MAOF + LangGraph.\n\nThis endpoint uses a LangGraph workflow that:\n1. Parses the query using LLM to extract app_name and namespace\n2. Routes based on extracted parameters:\n   - Both app_name and namespace → fetch dependencies\n   - Only namespace → suggest dependencies (return list of apps)\n   - Neither → return error\n3. Executes the appropriate action\n4. Returns structured results in AgentResponse format\n\nUse Cases:\n- Given namespace only: Returns list of available apps to select from\n- Given namespace and app_name: Fetches and returns dependencies\n\nExpected query formats:\n- Natural language: \"Get dependencies for payment-service in production\"\n- Direct parameters: \"appName=user-api namespace=staging\"\n- Context string: Agent response format with parameters",
+        "operationId": "process_query_endpoint_dependencies_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Root",
+        "description": "Root endpoint.",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Health check endpoint.",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgentResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "Status of agent execution (success, error)."
+          },
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "The original user query processed by the agent."
+          },
+          "data": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data",
+            "description": "Structured data returned by the agent (dependencies, apps, etc)."
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error",
+            "description": "Error message if the agent execution failed."
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "query"
+        ],
+        "title": "AgentResponse",
+        "description": "Response model for MAOF agent."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "QueryRequest": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "title": "Session Id",
+            "description": "Session identifier for tracking or fetching context from previous interactions"
+          },
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "Query string containing context for tool execution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "query"
+        ],
+        "title": "QueryRequest",
+        "description": "Request model for query with session."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "project_name": "My A2A Agent",
+  "project_slug": "my-a2a-agent",
+  "agent_name": "my_agent",
+  "agent_description": "A2A subagent that handles <describe your domain here>",
+  "agent_version": "1.0.0",
+  "agent_port": "8002",
+  "author": "Your Team",
+  "python_version": "3.11"
+}

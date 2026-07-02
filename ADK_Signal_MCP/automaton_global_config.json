@@ -1,0 +1,19 @@
+{
+  "flows": {
+    "dev": {
+      "duration": 5,
+      "virtualUsers": 10,
+      "rampUpPeriod": 2
+    },
+    "stage": {
+      "duration": 10,
+      "virtualUsers": 25,
+      "rampUpPeriod": 5
+    },
+    "prod": {
+      "duration": 15,
+      "virtualUsers": 50,
+      "rampUpPeriod": 5
+    }
+  }
+}

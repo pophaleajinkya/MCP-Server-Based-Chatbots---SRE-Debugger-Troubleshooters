@@ -1,0 +1,118 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Valid8 MCP Server API",
+    "description": "MCP server for Walmart International Valid8 CA/MX validation APIs",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8015",
+      "description": "Local development"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Server information",
+        "operationId": "getServerInfo",
+        "responses": {
+          "200": {
+            "description": "Server metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "version": { "type": "string" },
+                    "mcp_endpoint": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "Healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/liveness": {
+      "get": {
+        "summary": "Liveness probe",
+        "operationId": "getLiveness",
+        "responses": {
+          "200": {
+            "description": "Alive"
+          }
+        }
+      }
+    },
+    "/health/readiness": {
+      "get": {
+        "summary": "Readiness probe",
+        "operationId": "getReadiness",
+        "responses": {
+          "200": {
+            "description": "Ready"
+          },
+          "503": {
+            "description": "Not ready"
+          }
+        }
+      }
+    },
+    "/mcp/tools": {
+      "get": {
+        "summary": "List MCP tools",
+        "operationId": "listMcpTools",
+        "responses": {
+          "200": {
+            "description": "Tool list"
+          }
+        }
+      }
+    },
+    "/mcp/resources": {
+      "get": {
+        "summary": "List MCP resources",
+        "operationId": "listMcpResources",
+        "responses": {
+          "200": {
+            "description": "Resource list"
+          }
+        }
+      }
+    },
+    "/mcp/prompts": {
+      "get": {
+        "summary": "List MCP prompts",
+        "operationId": "listMcpPrompts",
+        "responses": {
+          "200": {
+            "description": "Prompt list"
+          }
+        }
+      }
+    }
+  }
+}

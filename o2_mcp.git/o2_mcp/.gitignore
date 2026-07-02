@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[co]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Package manager
+uv.lock
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Testing / coverage
+.pytest_cache/
+coverage/
+coverage.xml
+pytest-report.xml
+results.xml
+.coverage
+htmlcov/
+
+# Database / cache files
+*.db
+*.sqlite
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Wibey
+.wibey-test/
+.scannerwork/

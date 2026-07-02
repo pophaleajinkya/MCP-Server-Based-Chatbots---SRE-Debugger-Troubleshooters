@@ -1,0 +1,330 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Scrollbar ──────────────────────────────── */
+:root {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
+  --scrollbar-width: 6px;
+  --scrollbar-thumb: #94a3b8;
+  --scrollbar-track: #f1f5f9;
+}
+
+.dark {
+  --scrollbar-thumb: #475569;
+  --scrollbar-track: #1e293b;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+
+html, body {
+  height: 100%;
+}
+
+/* ── Table styles ───────────────────────────── */
+.table-container {
+  @apply rounded-lg border border-gray-200;
+}
+
+.dark .table-container {
+  @apply border-gray-700;
+}
+
+.table-header-cell {
+  @apply px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-widest bg-gray-50 whitespace-nowrap cursor-pointer select-none;
+  letter-spacing: 0.07em;
+}
+
+.dark .table-header-cell {
+  @apply bg-gray-800 text-gray-400;
+}
+
+.table-header-cell:hover {
+  @apply bg-gray-100;
+}
+
+.dark .table-header-cell:hover {
+  @apply bg-gray-700;
+}
+
+.table-row {
+  @apply border-b border-gray-100 hover:bg-blue-50/60 transition-colors;
+}
+
+.dark .table-row {
+  @apply border-gray-800 hover:bg-gray-800/60;
+}
+
+.table-row:last-child {
+  @apply border-0;
+}
+
+.table-cell {
+  @apply px-4 py-2.5 text-sm text-gray-700;
+}
+
+.dark .table-cell {
+  @apply text-gray-300;
+}
+
+/* ── Column-separated tables ─────────────────── */
+.col-separated td {
+  border-right: 1px solid #e5e7eb;
+}
+
+.dark .col-separated td {
+  border-right: 1px solid #30363d;
+}
+
+.col-separated td:last-child {
+  border-right: none;
+}
+
+/* ── Prose / Markdown styles (AWS-inspired) ─── */
+.prose-adk {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: #1a2332;
+}
+
+.dark .prose-adk {
+  color: #e2e8f0;
+}
+
+.prose-adk h1,
+.prose-adk h2,
+.prose-adk h3,
+.prose-adk h4 {
+  @apply font-semibold text-gray-900 mt-5 mb-2 leading-snug;
+}
+
+.dark .prose-adk h1,
+.dark .prose-adk h2,
+.dark .prose-adk h3,
+.dark .prose-adk h4 {
+  @apply text-gray-100;
+}
+
+.prose-adk h1 { @apply text-xl; }
+.prose-adk h2 { @apply text-base; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.35rem; }
+.prose-adk h3 { @apply text-sm; color: #374151; }
+.prose-adk h4 { @apply text-sm font-medium; color: #4b5563; }
+
+.dark .prose-adk h2 { border-bottom-color: #374151; }
+.dark .prose-adk h3 { color: #d1d5db; }
+.dark .prose-adk h4 { color: #9ca3af; }
+
+.prose-adk p {
+  @apply mb-3 leading-relaxed;
+  color: #374151;
+}
+
+.dark .prose-adk p {
+  color: #cbd5e1;
+}
+
+.prose-adk ul {
+  @apply list-disc pl-5 mb-3;
+  color: #374151;
+}
+
+.dark .prose-adk ul {
+  color: #cbd5e1;
+}
+
+.prose-adk ol {
+  @apply list-decimal pl-5 mb-3;
+  color: #374151;
+}
+
+.dark .prose-adk ol {
+  color: #cbd5e1;
+}
+
+.prose-adk li {
+  @apply mb-1;
+  line-height: 1.6;
+}
+
+.prose-adk li + li {
+  margin-top: 0.2rem;
+}
+
+/* Inline code */
+.prose-adk code {
+  font-family: var(--font-mono), Consolas, monospace;
+  @apply text-[0.8rem] bg-slate-100 px-1.5 py-0.5 rounded text-blue-700 font-medium;
+  letter-spacing: -0.01em;
+}
+
+.dark .prose-adk code {
+  @apply bg-slate-800 text-blue-300;
+}
+
+/* Code blocks */
+.prose-adk pre {
+  font-family: var(--font-mono), Consolas, monospace;
+  @apply bg-[#0f1117] text-[#e2e8f0] rounded-xl p-4 overflow-x-auto mb-4 text-[0.8rem] leading-relaxed;
+  border: 1px solid #1e2535;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.prose-adk pre code {
+  @apply bg-transparent text-[#e2e8f0] p-0 font-normal;
+  font-size: inherit;
+}
+
+/* Horizontal rules */
+.prose-adk hr {
+  @apply my-4;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dark .prose-adk hr {
+  border-top-color: #374151;
+}
+
+/* Blockquotes */
+.prose-adk blockquote {
+  @apply pl-4 my-3 rounded-r-lg;
+  border-left: 3px solid #0071CE;
+  background: #f0f7ff;
+  padding: 0.6rem 1rem;
+  font-style: normal;
+  color: #374151;
+}
+
+.dark .prose-adk blockquote {
+  background: rgba(0, 113, 206, 0.1);
+  color: #cbd5e1;
+}
+
+.prose-adk blockquote p {
+  @apply mb-0;
+}
+
+/* Links */
+.prose-adk a {
+  @apply text-[#0071CE] no-underline font-medium;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.prose-adk a:hover {
+  border-bottom-color: #0071CE;
+}
+
+.dark .prose-adk a {
+  @apply text-[#60a5fa];
+}
+
+.dark .prose-adk a:hover {
+  border-bottom-color: #60a5fa;
+}
+
+/* Prose tables */
+.prose-adk table {
+  @apply w-full text-sm border-collapse mb-4 rounded-lg overflow-hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.dark .prose-adk table {
+  border-color: #374151;
+}
+
+.prose-adk table th {
+  @apply bg-gray-50 px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide;
+  border-bottom: 2px solid #e5e7eb;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.dark .prose-adk table th {
+  @apply bg-gray-800 text-gray-400;
+  border-bottom-color: #374151;
+}
+
+.prose-adk table td {
+  @apply px-4 py-2.5 text-gray-700;
+  border-bottom: 1px solid #f3f4f6;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.dark .prose-adk table td {
+  @apply text-gray-300;
+  border-bottom-color: #1f2937;
+}
+
+.prose-adk table tr:last-child td {
+  border-bottom: none;
+}
+
+.prose-adk table tr:hover td {
+  background: #f8faff;
+}
+
+.dark .prose-adk table tr:hover td {
+  background: rgba(0, 113, 206, 0.05);
+}
+
+/* ── Streaming cursor ───────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.streaming-cursor::after {
+  content: "▋";
+  animation: blink 1s step-end infinite;
+  @apply text-walmart-blue;
+}
+
+/* ── Reasoning stream ──────────────────────── */
+@keyframes reasoning-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-reasoning-fade-in {
+  animation: reasoning-fade-in 0.15s ease-out forwards;
+}
+
+.reasoning-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.reasoning-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.reasoning-scroll::-webkit-scrollbar-thumb {
+  background: rgba(113, 113, 122, 0.3);
+  border-radius: 2px;
+}
+.reasoning-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(113, 113, 122, 0.5);
+}

@@ -1,0 +1,270 @@
+build:
+  skip: false
+  artifact: "act-super-agent"
+  docker:
+    app:
+      dockerFile: Dockerfile
+      runtime: python
+      buildArgs:
+        pythonVersion: 3.12-slim-bullseye
+        basePythonOSVersion: 3.11
+        sonarEnable: true
+        enableTestReporting: true
+        skipCodeCoverage: false
+        cpd: $concordProcessId
+        BUILDURL: $BUILD_URL
+        LOOPERID: $LOOPER_RUN_ID
+        job_name: $JOB_NAME
+        job_url: $JOB_URL
+        jenkins_url: $JENKINS_URL
+        looper_run_id: $LOOPER_RUN_ID
+        github_repo_git_url: "{{$.kitt.build.commitEvent.repo.url}}"
+        github_branch_name: "{{ $.kitt.build.commitEvent.currentBranch }}"
+        looper_job_type: $LOOPER_JOB_TYPE
+        sonarProjKey: "{{ $.kitt.build.commitEvent.repo.org}}:{{ $.kitt.build.commitEvent.repo.name}}"
+        sonarOpts: "-Dproject.settings=sonar-project.properties
+                            -Dsonar.branch.name={{ $.kitt.build.commitEvent.currentBranch }}
+                            -Dsonar.projectVersion={{ $.kitt.build.version }}
+                            -Dsonar.scm.revision={{ $.kitt.build.commitEvent.commitId }}
+                            -Dsonar.analysis.buildVersion={{ $.kitt.build.version }}
+                            -Dsonar.analysis.buildNumber=$LOOPER_RUN_ID
+                            -Dsonar.analysis.buildUrl=$BUILD_URL"
+deploy:
+  namespace: sre-tools
+  releaseType:
+    rollbackOnError: true
+    waitForReady: true
+    deployTimeout: 500
+  helm:
+    values:
+      min:
+        cpu: 4000m
+        memory: 8G
+      max:
+        cpu: 4000m
+        memory: 8G
+      scaling:
+        enabled: "true"
+        cpuPercent: 70
+        min: 1
+        max: 3
+      startupProbe:
+        enabled: "true"
+        wait: 30
+        probeInterval: 10
+        failureThreshold: 18
+        timeout: 4
+        path: "/health"
+        headers: "*/*"
+        port: 8010
+      livenessProbe:
+        path: "/liveness"
+        wait: 120
+        port: 8010
+        timeout: 4
+      readinessProbe:
+        path: "/ready"
+        wait: 120
+        timeout: 4
+        port: 8010
+      networking:
+        pathPrefix: /
+        externalPort: "8010"
+        internalPort: "8010"
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "true"
+  gslb:
+    enabled: true
+    lbRoutings:
+      dev:
+        cnames: [ maof-act-agent.dev.walmart.com ]
+        matchStages: [ dev ]
+      stage:
+        cnames: [ maof-act-agent.stage.walmart.com ]
+        matchStages: [ stage ]
+      prod:
+        cnames: [ maof-act-agent.walmart.com ]
+        matchStages: [ prod ]
+  stages:
+    - name: dev
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-dev-az-003']
+      refs: ['main', 'group_variations_v1']
+      helm:
+        values:
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.act_agent
+                content: act_agent/dev/config
+              - destination: .env.redis-config
+                content: genAI/dev/redis-config
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE
+          metadata:
+            labels:
+              wm.app: SUPER-AGENT
+              wm.env: Dev
+            annotations:
+              wm.workloadId: "act-super-agent"
+      preDeploy:
+        - concord:
+            name: Integration Test
+            enabled: true
+            arguments:
+              config:
+                git:
+                  orgName: '{{$.kitt.build.commitEvent.repo.org}}'
+                  repoName: '{{$.kitt.build.commitEvent.repo.name}}'
+                  branchName: '{{$.kitt.build.commitEvent.currentBranch}}'
+                  looperFile: .looper.yml
+                integrationTesting:
+                  call: IntegrationTest
+                  mode: Passive
+                  env: pqa
+                  threshHold: 80
+                  artifactId: '{{$.kitt.build.artifact}}'
+                  releaseVersion: '{{$.kitt.build.version}}'
+      postDeploy:
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: 'api-spec.json'
+                contractTest:
+                  cname: "https://maof-act-agent.dev.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+
+    - name: stage
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-stage-az-003', 'uscentral-stage-az-305']
+      refs: ['main']
+      helm:
+        values:
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.act_agent
+                content: act_agent/stage/config
+              - destination: .env.redis-config
+                content: genAI/stage/redis-config
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE
+          scaling:
+            min: 2
+            max: 20
+          metadata:
+            labels:
+              wm.app: SUPER-AGENT
+              wm.env: Stage
+      postDeploy:
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test-stage
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: 'api-spec.json'
+                contractTest:
+                  cname: "https://maof-act-agent.stage.walmart.com"
+                  threshHold: 0
+                  mode: Passive
+
+    - name: prod
+      approvers:
+        groups:
+          - "IntlSRE"
+      target:
+        cluster_id: ['useast-prod-az-006', 'uswest-prod-az-334']
+      refs: ['main']
+      helm:
+        values:
+          secrets:
+            akeyless: true
+            files:
+              - destination: .env.act_agent
+                content: act_agent/prod/config
+              - destination: .env.redis-config
+                content: genAI/prod/redis-config
+            config:
+              path: /secrets/
+              akeyless:
+                path: /Prod/WCNP/homeoffice/IntlSRE
+          scaling:
+            min: 2
+            max: 40
+          metadata:
+            labels:
+              wm.app: SUPER-AGENT
+              wm.env: Prod
+      postDeploy:
+        - concord:
+            name: automaton
+            action: start
+            org: SDE-CloudNative
+            project: Test-Executors
+            repo: Automaton
+            sync: true
+            arguments:
+              gitUrl: "https://gecgithub01.walmart.com/{{$.kitt.build.commitEvent.repo.org}}/{{$.kitt.build.commitEvent.repo.name}}.git"
+              branch: "{{$.kitt.build.commitEvent.currentBranch}}"
+              flow: perf-test-prod
+              userid: "${initiator.username}"
+              apmId: "{{$.kitt.managedNamespace.apmId}}"
+              workloadId: "{{$.kittExec.currentStage.workloadId}}"
+              version: "{{$.kitt.build.version}}"
+        - concord:
+            name: R2C
+            enabled: true
+            arguments:
+              config:
+                spec:
+                  specPath: 'api-spec.json'
+                contractTest:
+                  cname: "https://maof-act-agent.walmart.com"
+                  threshHold: 0
+                  mode: Passive

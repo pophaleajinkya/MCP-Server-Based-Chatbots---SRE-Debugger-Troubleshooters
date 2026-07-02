@@ -1,0 +1,43 @@
+{
+  "project_name": "o2-mcp",
+  "slack": "gen-ai-ci-cd-alerts",
+  "email": [
+    "IntlSRE@walmart.com"
+  ],
+  "variables": {
+    "scmurl": "https://gecgithub01.walmart.com/intl-ecomm-svcs/o2_mcp.git",
+    "giturl": "https://gecgithub01.walmart.com/intl-ecomm-svcs/o2_mcp.git"
+  },
+  "flows": {
+    "perf-test": {
+      "appurl": "https://o2-mcp.dev.walmart.com",
+      "duration": "5",
+      "vu": "10",
+      "dc_load_distribution": {
+        "eus2-dev-aperf1": 100
+      },
+      "config": "/perf/perf.json"
+    },
+    "perf-test-stage": {
+      "appurl": "https://o2-mcp.stage.walmart.com",
+      "duration": "10",
+      "vu": "25",
+      "dc_load_distribution": {
+        "eus2-dev-aperf1": 50,
+        "scus-dev-aperf1": 50
+      },
+      "config": "/perf/perf.json"
+    },
+    "perf-test-prod": {
+      "appurl": "https://o2-mcp.prod.walmart.com",
+      "duration": "15",
+      "vu": "50",
+      "dc_load_distribution": {
+        "eus2-perf-a1": 50,
+        "wus-perf-a1": 50
+      },
+      "config": "/perf/perf.json"
+    }
+  }
+}
+

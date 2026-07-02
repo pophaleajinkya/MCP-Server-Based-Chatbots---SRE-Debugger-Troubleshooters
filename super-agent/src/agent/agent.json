@@ -1,0 +1,51 @@
+{
+  "name": "A2A Health Agent",
+  "description": "WCNP health intelligence agent. Answers natural language questions about Kubernetes namespaces, deployments, latency, and Prometheus metrics on WCNP clusters using live MCP tool integrations.",
+  "url": "http://localhost:8001/a2a",
+  "version": "2.0.0",
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "authentication": {
+    "schemes": []
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "wcnp-namespace-health",
+      "name": "WCNP Namespace Health",
+      "description": "Check the overall health of a WCNP namespace, including deployment rollout status, pod readiness, and recent events.",
+      "tags": ["wcnp", "kubernetes", "health", "namespace"],
+      "examples": [
+        "Check health of namespace intl-sre",
+        "Are all pods running in sre-tools?",
+        "Show me the rollout status for my namespace"
+      ]
+    },
+    {
+      "id": "wcnp-latency-analysis",
+      "name": "Latency Analysis",
+      "description": "Query Prometheus for latency metrics of a specific app or service, with support for time ranges and percentile breakdowns.",
+      "tags": ["wcnp", "prometheus", "latency", "metrics"],
+      "examples": [
+        "What is the p99 latency of signal-api in the last hour?",
+        "Show me latency trends for act-engine-api today by hour",
+        "Is there a latency spike in hub-server-horizon?"
+      ]
+    },
+    {
+      "id": "wcnp-deployment-info",
+      "name": "Deployment Information",
+      "description": "Retrieve details about a specific deployment, including replica counts, image versions, resource limits, and recent rollout history.",
+      "tags": ["wcnp", "kubernetes", "deployment"],
+      "examples": [
+        "How many replicas does signal-api have in useast-prod-az-006?",
+        "What image version is act-engine-api running?",
+        "When was the last deployment of hub-server-horizon?"
+      ]
+    }
+  ]
+}

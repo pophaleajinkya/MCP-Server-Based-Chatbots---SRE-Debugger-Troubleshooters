@@ -1,0 +1,33 @@
+# MCP server config for local development.
+#
+# Usage:
+#   1. Copy this file: cp mcp_servers.yml.example mcp_servers.yml
+#   2. Edit mcp_servers.yml with your local server URLs
+#   3. Add to .env:
+#        ENV=dev
+#        MCP_SERVERS_FILE=./mcp_servers.yml
+#
+# mcp_servers.yml is gitignored — never commit it.
+#
+# Fields per server:
+#   name        — display name (used in /health and logs)
+#   url         — MCP endpoint (must end with /mcp/)
+#   transport   — "streamable_http" (default) or "sse"
+#   enabled     — set false to disable without removing the entry
+#   description — optional, shown in /health
+#   headers     — optional auth headers, e.g. {Authorization: "Bearer token"}
+
+servers:
+  - name: health-mcp
+    url: http://localhost:8999/mcp/
+    transport: streamable_http
+    enabled: true
+    description: "WCNP health checks, Prometheus queries, chart rendering"
+    headers: {}
+
+  - name: dependency-mcp
+    url: http://localhost:8015/mcp/
+    transport: streamable_http
+    enabled: true
+    description: "Upstream/downstream dependency graph"
+    headers: {}

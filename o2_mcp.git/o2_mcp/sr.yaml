@@ -1,0 +1,20 @@
+schemaVersion: 1.0.0
+notify:
+  slack:
+    channelName: gen-ai-ci-cd-alerts
+applications:
+  - key: OO-MCP
+    name: OoMcp
+    description: This application is for OO_MCP for Walmart International..
+    teamRostersProductId: 2249
+    environments:
+      - name: Dev
+        type: DEVELOPMENT
+        consumerIdInfos:
+          - consumerId: 6cdcb33c-5895-40b7-a4d9-799ebf963ab0
+            publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm7I7EzMt0zxcc5d+NP9eWVjoLLbEto52HYqsOOdg6Zz8S4V+v+ChsQcdKzoCYq38BUp76XdO+Uf3vEe/+ExgAv01RA26C5BR7DCigBaXkZcM2ZB9LUrFV9NZBoD6vzUC4LLdyVdlHdZTZUbJa8t5QyIhbV2APc+Tlc0Gz663LjgH0WRJM7q47JGZw6Koej+pMmhF2OEPppYxuV68bmmOzusu5K88DXIy7hluvPofiYw62OYlMjV9IwqXODmg9JIOJ2LNfKjr5PSJjsmJ/qMRV+JjF8mwrpl1tqJYa18WK1lGdX/pVn0MxEAEvLMNinLokpPQxuZoDOg8Qc3U/JdJmwIDAQAB
+      - name: Prod
+        type: PRODUCTION
+        consumerIdInfos:
+          - consumerId: a642f423-850b-4749-bb26-ce37ad1c2326
+            publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgyUfJbOGIJ0d+EnP6k3M74eY6uRQaVKAhjdPYJnt1NJDX9x7ezUS8ISNfcxDLikEduxa8hnTYoicDommliBGXO/oj2xsm4HhdhTSWkWeJuSXg2Q/HvWuNqr/c0GlcdEt3Ud2Qz+jsBl2OrpWNPUShUROEIJifvaK+Q1NvIf9ZauI6HPo62C1wL3soshchMZlLez5aNaHO6OYXxyUKB2yytvHDwI+8LDz+YciPbZi8b+JveGX9xz9nkkvmutq0pUvPG5tKNN5FeW7ao+1oBbEvCxEPkp8JHqBiwLkOcrgQ2pmQcamDw2otgxRORs0bOluymKmsRDZTH3alzAmsf1RvwIDAQAB

@@ -1,0 +1,108 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "A2A Health Agent",
+    "description": "WCNP health intelligence agent. Combines MCP tool servers with Walmart LLM gateways to answer natural language questions about cluster health, latency, and deployments.",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["observability"],
+        "summary": "Liveness + capability summary",
+        "description": "Return the agent's current status, active LLM, and connected MCP tools.",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "tags": ["observability"],
+        "summary": "Kubernetes readiness probe",
+        "description": "Lightweight readiness check — returns 200 when the server is up.",
+        "operationId": "ready_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {"type": "string"},
+                  "type": "object",
+                  "title": "Response Ready Ready Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/liveness": {
+      "get": {
+        "tags": ["observability"],
+        "summary": "Kubernetes liveness probe",
+        "description": "Lightweight liveness check — returns 200 when the server is up.",
+        "operationId": "ready_liveness_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {"type": "string"},
+                  "type": "object",
+                  "title": "Response Ready Liveness Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HealthResponse": {
+        "properties": {
+          "status": {"type": "string", "title": "Status"},
+          "version": {"type": "string", "title": "Version"},
+          "active_llm": {"type": "string", "title": "Active Llm"},
+          "llm_endpoint": {"type": "string", "title": "Llm Endpoint"},
+          "mcp_servers": {
+            "items": {"$ref": "#/components/schemas/MCPServerInfo"},
+            "type": "array",
+            "title": "Mcp Servers"
+          },
+          "mcp_tools": {
+            "items": {"type": "string"},
+            "type": "array",
+            "title": "Mcp Tools"
+          }
+        },
+        "type": "object",
+        "required": ["status", "version", "active_llm", "llm_endpoint", "mcp_servers", "mcp_tools"],
+        "title": "HealthResponse"
+      },
+      "MCPServerInfo": {
+        "properties": {
+          "name": {"type": "string", "title": "Name"},
+          "url": {"type": "string", "title": "Url"}
+        },
+        "type": "object",
+        "required": ["name", "url"],
+        "title": "MCPServerInfo"
+      }
+    }
+  }
+}

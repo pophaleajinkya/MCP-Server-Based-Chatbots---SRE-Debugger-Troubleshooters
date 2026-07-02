@@ -1,0 +1,107 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SRE AI UI",
+    "description": "SRE AI UI - Next.js frontend for ADK agents with PingFederate SSO authentication",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "https://sre.ai.walmart.com",
+      "description": "Production"
+    },
+    {
+      "url": "https://sre.ai.stage.walmart.com",
+      "description": "Stage"
+    },
+    {
+      "url": "https://sre.ai.dev.walmart.com",
+      "description": "Dev"
+    }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Health check endpoint for Kubernetes readiness/liveness probes",
+        "operationId": "health_check",
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health/liveness": {
+      "get": {
+        "summary": "Liveness Probe",
+        "description": "Kubernetes liveness probe — returns 200 if the process is running",
+        "operationId": "liveness_check",
+        "responses": {
+          "200": {
+            "description": "Process is alive",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health/readiness": {
+      "get": {
+        "summary": "Readiness Probe",
+        "description": "Kubernetes readiness probe — returns 200 if the service is ready to accept traffic",
+        "operationId": "readiness_check",
+        "responses": {
+          "200": {
+            "description": "Service is ready",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ok"
+          },
+          "service": {
+            "type": "string",
+            "example": "sre-ai-ui"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "status",
+          "service",
+          "timestamp"
+        ]
+      }
+    }
+  }
+}

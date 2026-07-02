@@ -1,0 +1,12 @@
+.venv
+docker-compose.yml
+milvus_llamaindex.db
+.idea
+__pycache__
+.env
+kitt.yaml
+server.log
+results.xml
+report.html
+.coverage
+uv.lock

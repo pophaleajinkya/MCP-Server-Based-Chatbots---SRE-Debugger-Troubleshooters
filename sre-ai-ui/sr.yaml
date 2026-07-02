@@ -1,0 +1,22 @@
+schemaVersion: 1.0.0
+notify:
+  slack:
+    channelName: gen-ai-ci-cd-alerts
+applications:
+  - key: SRE-AI-UI
+    name: sre-ai-ui
+    description: "SRE AI UI - Next.js frontend for AI-powered SRE agents with PingFederate SSO authentication."
+    teamRostersProductId: 2249
+    environments:
+      - name: Dev
+        type: DEVELOPMENT
+        consumerIdInfos:
+          - consumerId: 54dc5cfc-cfb7-47e6-95bd-8ca5cdcb1298
+            publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqsYSpiMv4U54lXFHryoBH6tgycm5uB0KGxmn3usO+LsyIzxiaJF28uTyMszh0/Nrdp7D5CKQaBMl2aCUxGjNON6LnrnvU1KsCf+zqDO6v1c2Mqzra91Xbgtxx0za1F3tJMpoMrNOI9pny8se0NOikQ8U/69YxyL8hOty45S98o3ZPnQNNEg5j8eIeicwKQdfIVcjp/8gOS5g9WnDpJwnNuIMfYO1Xdt9jN5M+hR1jiCJz2xCOEyp515uz2hcF79zCfFjrJh16Tx+2pbNg2OzlpY/yBLd/NH0sAhqb2eIonGPb8MvrAoUN+2LtocsJL7IOmk2Pkesxaz4hblP1UFHkQIDAQAB
+      - name: Prod
+        type: PRODUCTION
+        consumerIdInfos:
+          - consumerId: ccf7fcce-4aca-49f7-b1e6-a2c6864d43a2
+            publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwwx12V3XSb4y4VXIB+zJnbWWO66StGJW2AyE8Yvf2Tvlcg5TZYPgtrkokhhF8mwIfoEg7DdD4XoERyA1Q/VABIYgJlx3spsB8E7G+7EKYrt4LuPs1t6BWYghwTyNwfL9xAwdTUAThsJGufIE0wN5rovt7MOhYI73VcKTanaKBNdqpvQHN5QWCcuauOFfRYFrFmPj6pMTd4pGZI3LwzQ1KrJ84595fwVYhl05tBEGJMevl07fPjw/OQxJUr0OvRfsb7VQtXQcKckRIMrH/Hwx7otL+n3rPAjuXV+S6fvDiq71vQMTOI1FCP2O+8Tx46o+fStbbDxwj2mLeyg0msEuvwIDAQAB
+
+            

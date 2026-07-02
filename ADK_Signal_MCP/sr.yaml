@@ -1,0 +1,17 @@
+# sr.yaml
+
+schemaVersion: 1.0.0
+notify:
+  slack:
+    channelName: gen-ai-ci-cd-alerts
+applications:
+  - key: SIGNAL-MCP
+    name: SignalMcp
+    organization: GeC
+    environments:
+      - name: dev
+        type: DEVELOPMENT
+      - name: prod
+        type: PRODUCTION
+      - name: stage
+        type: STAGING
